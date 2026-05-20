@@ -1,8 +1,20 @@
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 import app from './app';
 
-const PORT: number = 5050;
+dotenv.config();
+const PORT: number = 3001;
 
-app.listen(PORT, (): void => {
-  // eslint-disable-next-line no-console
-  console.log(`Server is running on ${PORT}...`);
-});
+const start = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URL as string);
+
+    app.listen(PORT, () => {
+      console.log(`server started on port = ${PORT}`);
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+start();

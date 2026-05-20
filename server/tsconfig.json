@@ -10,7 +10,8 @@
   ],
   "ts-node": {
     "transpileOnly": true,
-    "files": true
+    "files": true,
+    "require": ["tsconfig-paths/register"]
   },
   "compilerOptions": {
     "target": "es2016",
@@ -24,7 +25,22 @@
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "6.0",
+    "baseUrl": "./",
+    "paths": {
+      "@utils":[
+        "src/utils/"
+      ],
+      "@utils/*":[
+        "src/utils/*"
+      ],
+      "@categories":[
+        "src/categories/"
+      ],
+      "@categories/*":[
+        "src/categories/*"
+      ],
+    }
   }
 }
 
