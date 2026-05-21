@@ -10,7 +10,10 @@ class CategoriesService {
 
   public async getCategory(id: string) {
     const category = await Category.findOne({ _id: id });
-    this.handleNoCategory(category, id);
+    if (!category) {
+      throw ApiError.NotFound(`Category with this _id ${id} does not exists`);
+    }
+    return category;
   }
 
   //TODO: make creation and deletion of categories only for ADMIN role;
@@ -27,32 +30,23 @@ class CategoriesService {
     console.log(id);
     const deletedCategory = await Category.findByIdAndDelete(id);
     if (!deletedCategory) {
-      this.handleNoCategory(null, id);
+      throw ApiError.NotFound(`Category with this _id ${id} does not exists`);
     }
     return deletedCategory;
   }
 
   public async updateCategory(dto: TUpdateCategory) {
-    const category = await Category.findOne({
-      $or: [{ _id: dto._id }, { name: dto.newName }],
-    });
-    this.handleNoCategory(dto._id);
-    if (category?.name == dto.newName) {
-      throw ApiError.BadRequest(
-        `Category with name "${dto.newName}" already exists`
+    const updatedCategory = await Category.findByIdAndUpdate(
+      dto._id,
+      { $set: { name: dto.newName } },
+      { new: true }
+    ).exec();
+    if (!updatedCategory) {
+      throw ApiError.NotFound(
+        `Category with this _id ${dto._id} does not exists`
       );
     }
-    const updatedCategory = await Category.updateOne(
-      { _id: dto._id },
-      { $set: { name: dto.newName } }
-    );
     return updatedCategory;
-  }
-
-  private handleNoCategory(category: any, id: string = '') {
-    if (!category) {
-      throw ApiError.BadRequest(`Category with this _id ${id} does not exists`);
-    }
   }
 }
 

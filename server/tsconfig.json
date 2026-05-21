@@ -26,6 +26,7 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "ignoreDeprecations": "6.0",
+    "types": ["jest", "node"],
     "baseUrl": "./",
     "paths": {
       "@utils":[
@@ -38,6 +39,12 @@
         "src/categories/"
       ],
       "@categories/*":[
+        "src/categories/*"
+      ],
+      "@middlewares":[
+        "src/middlewares/"
+      ],
+      "@middlewares/*":[
         "src/categories/*"
       ],
     }

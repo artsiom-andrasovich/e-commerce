@@ -29,7 +29,7 @@ class CategoriesController {
     try {
       const { categoryId: id } = req.params;
       const newCategory = await categoriesService.deleteCategory(id as string);
-      return res.sendStatus(200);
+      return res.sendStatus(204);
     } catch (e) {
       next(e);
     }
