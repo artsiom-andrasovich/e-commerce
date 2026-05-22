@@ -16,8 +16,10 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "helmet": "^8.2.0",
     "mongoose": "^9.6.2",
     "mongose": "^0.0.2-security",
     "zod": "^4.4.3",
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/cors": "^2.8.19",
     "@types/eslint__js": "^8.42.3",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
