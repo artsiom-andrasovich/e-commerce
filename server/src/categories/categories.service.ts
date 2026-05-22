@@ -3,9 +3,21 @@ import { TCreateCategory, TUpdateCategory } from './dto';
 import { Category } from './model';
 
 class CategoriesService {
-  public async getAllCategories() {
-    const categories = await Category.find();
-    return categories;
+  public async getAllCategories(limit: number, cursor: string | undefined) {
+    const query = cursor ? { _id: { $gt: cursor } } : {};
+
+    const categories = await Category.find(query)
+      .sort({ _id: 1 })
+      .limit(limit)
+      .exec();
+
+    const hasMore = categories.length === limit;
+    const nextCursor = hasMore ? categories[categories.length - 1]._id : null;
+
+    return {
+      data: categories,
+      nextCursor,
+    };
   }
 
   public async getCategory(id: string) {

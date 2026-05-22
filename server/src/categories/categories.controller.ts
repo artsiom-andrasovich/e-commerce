@@ -8,7 +8,13 @@ class CategoriesController {
     next: NextFunction
   ) {
     try {
-      const categories = await categoriesService.getAllCategories();
+      const limit = parseInt(req.query.limit as string, 10) || 10;
+      const cursor = req.query.cursor as string | undefined;
+
+      const categories = await categoriesService.getAllCategories(
+        limit,
+        cursor
+      );
       return res.status(200).json(categories);
     } catch (e) {
       next(e);

@@ -7,7 +7,12 @@ describe('GET /categories', () => {
     const res = await request(app).get('/categories');
 
     expect(res.status).toBe(200);
-    expect(res.body).toEqual([]);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        data: [],
+        nextCursor: null,
+      })
+    );
   });
 
   it('Have to return array of categories, only if they are into DB', async () => {
@@ -17,14 +22,37 @@ describe('GET /categories', () => {
     const res = await request(app).get('/categories');
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveLength(2);
+    expect(res.body.data).toHaveLength(2);
+  });
 
-    expect(res.body).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ name: 'Laptops' }),
-        expect.objectContaining({ name: 'Phones' }),
-      ])
+  it('Have to return correct pages with cursor (limit = 2, total = 3)', async () => {
+    await Category.create({ name: 'Laptops' });
+    await Category.create({ name: 'Smartphones' });
+    await Category.create({ name: 'Tablets' });
+
+    const resPage1 = await request(app).get('/categories?limit=2');
+
+    expect(resPage1.status).toBe(200);
+    expect(resPage1.body.data).toHaveLength(2);
+
+    expect(resPage1.body.data[0].name).toBe('Laptops');
+    expect(resPage1.body.data[1].name).toBe('Smartphones');
+
+    expect(resPage1.body.nextCursor).toBeDefined();
+    expect(resPage1.body.nextCursor).not.toBeNull();
+
+    const cursor = resPage1.body.nextCursor;
+
+    const resPage2 = await request(app).get(
+      `/categories?limit=2&cursor=${cursor}`
     );
+
+    expect(resPage2.status).toBe(200);
+
+    expect(resPage2.body.data).toHaveLength(1);
+    expect(resPage2.body.data[0].name).toBe('Tablets');
+
+    expect(resPage2.body.nextCursor).toBeNull();
   });
 });
 
@@ -62,7 +90,8 @@ describe('PUT /categories', () => {
   it('Have to change name in the best scenario without conflicts', async () => {
     await Category.create({ name: 'Laptops' });
 
-    const category_id = (await request(app).get('/categories')).body[0]._id;
+    const category_id = (await request(app).get('/categories')).body.data[0]
+      ._id;
     console.log(category_id);
     const updateCategoryDto = {
       _id: category_id,
@@ -101,8 +130,8 @@ describe('DELETE /categories', () => {
   it('Have to delete via id in the best scenario', async () => {
     await Category.create({ name: 'Laptops' });
 
-    const category_id = (await request(app).get('/categories')).body[0]._id;
-    console.log(category_id);
+    const category_id = (await request(app).get('/categories')).body.data[0]
+      ._id;
     const updateCategoryDto = {
       _id: category_id,
       newName: 'Phones',
@@ -114,7 +143,12 @@ describe('DELETE /categories', () => {
     const allCategories = await request(app).get('/categories');
 
     expect(allCategories.status).toBe(200);
-    expect(allCategories.body).toEqual([]);
+    expect(allCategories.body).toEqual(
+      expect.objectContaining({
+        data: [],
+        nextCursor: null,
+      })
+    );
   });
 
   it('Have to throw Not Found if no category with this _id', async () => {
