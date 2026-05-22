@@ -1,3 +1,4 @@
+'use client';
 import { ShoppingBasket, User } from 'lucide-react';
 import {
   DropdownMenu,
