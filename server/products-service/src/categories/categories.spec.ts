@@ -2,9 +2,9 @@ import request from 'supertest';
 import app from '../app';
 import { Category } from './model';
 
-describe('GET /categories', () => {
+describe('GET /api/categories', () => {
   it('Have to send status 200 and return empty array if db is empty', async () => {
-    const res = await request(app).get('/categories');
+    const res = await request(app).get('/api/categories');
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(
@@ -19,7 +19,7 @@ describe('GET /categories', () => {
     await Category.create({ name: 'Laptops' });
     await Category.create({ name: 'Phones' });
 
-    const res = await request(app).get('/categories');
+    const res = await request(app).get('/api/categories');
 
     expect(res.status).toBe(200);
     expect(res.body.data).toHaveLength(2);
@@ -30,7 +30,7 @@ describe('GET /categories', () => {
     await Category.create({ name: 'Smartphones' });
     await Category.create({ name: 'Tablets' });
 
-    const resPage1 = await request(app).get('/categories?limit=2');
+    const resPage1 = await request(app).get('/api/categories?limit=2');
 
     expect(resPage1.status).toBe(200);
     expect(resPage1.body.data).toHaveLength(2);
@@ -44,7 +44,7 @@ describe('GET /categories', () => {
     const cursor = resPage1.body.nextCursor;
 
     const resPage2 = await request(app).get(
-      `/categories?limit=2&cursor=${cursor}`
+      `/api/categories?limit=2&cursor=${cursor}`
     );
 
     expect(resPage2.status).toBe(200);
@@ -56,11 +56,11 @@ describe('GET /categories', () => {
   });
 });
 
-describe('POST /categories', () => {
+describe('POST /api/categories', () => {
   it('Have to create a new category if category with this name does not exits', async () => {
     const newCategory = { name: 'Laptops' };
 
-    const res = await request(app).post('/categories').send(newCategory);
+    const res = await request(app).post('/api/categories').send(newCategory);
     expect(res.status).toBe(201);
 
     expect(res.body).toEqual(
@@ -75,7 +75,7 @@ describe('POST /categories', () => {
 
     const newCategory = { name: 'Laptops' };
 
-    const res = await request(app).post('/categories').send(newCategory);
+    const res = await request(app).post('/api/categories').send(newCategory);
 
     expect(res.status).toBe(400);
     expect(res.body).toEqual(
@@ -86,11 +86,11 @@ describe('POST /categories', () => {
   });
 });
 
-describe('PUT /categories', () => {
+describe('PUT /api/categories', () => {
   it('Have to change name in the best scenario without conflicts', async () => {
     await Category.create({ name: 'Laptops' });
 
-    const category_id = (await request(app).get('/categories')).body.data[0]
+    const category_id = (await request(app).get('/api/categories')).body.data[0]
       ._id;
     console.log(category_id);
     const updateCategoryDto = {
@@ -98,7 +98,9 @@ describe('PUT /categories', () => {
       newName: 'Phones',
     };
 
-    const res = await request(app).put(`/categories`).send(updateCategoryDto);
+    const res = await request(app)
+      .put(`/api/categories`)
+      .send(updateCategoryDto);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(
@@ -114,7 +116,9 @@ describe('PUT /categories', () => {
       _id: '6a1086bc3fbf67a9fb630fb4',
       newName: 'Phones',
     };
-    const res = await request(app).put(`/categories`).send(updateCategoryDto);
+    const res = await request(app)
+      .put(`/api/categories`)
+      .send(updateCategoryDto);
 
     expect(res.status).toBe(404);
     expect(res.body).toEqual(
@@ -126,21 +130,21 @@ describe('PUT /categories', () => {
   });
 });
 
-describe('DELETE /categories', () => {
+describe('DELETE /api/categories', () => {
   it('Have to delete via id in the best scenario', async () => {
     await Category.create({ name: 'Laptops' });
 
-    const category_id = (await request(app).get('/categories')).body.data[0]
+    const category_id = (await request(app).get('/api/categories')).body.data[0]
       ._id;
     const updateCategoryDto = {
       _id: category_id,
       newName: 'Phones',
     };
 
-    const res = await request(app).delete(`/categories/${category_id}`);
+    const res = await request(app).delete(`/api/categories/${category_id}`);
     expect(res.status).toBe(204);
 
-    const allCategories = await request(app).get('/categories');
+    const allCategories = await request(app).get('/api/categories');
 
     expect(allCategories.status).toBe(200);
     expect(allCategories.body).toEqual(
@@ -153,7 +157,7 @@ describe('DELETE /categories', () => {
 
   it('Have to throw Not Found if no category with this _id', async () => {
     const res = await request(app).delete(
-      `/categories/6a1086bc3fbf67a9fb630fb4`
+      `/api/categories/6a1086bc3fbf67a9fb630fb4`
     );
 
     expect(res.status).toBe(404);

@@ -5,7 +5,6 @@ import { Category } from './model';
 class CategoriesService {
   public async getAllCategories(limit: number, cursor: string | undefined) {
     const query = cursor ? { _id: { $gt: cursor } } : {};
-
     const categories = await Category.find(query)
       .sort({ _id: 1 })
       .limit(limit)

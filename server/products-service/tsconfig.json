@@ -45,7 +45,7 @@
         "src/middlewares/"
       ],
       "@middlewares/*":[
-        "src/categories/*"
+        "src/middlewares/*"
       ],
     }
   }
