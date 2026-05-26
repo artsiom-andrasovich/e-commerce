@@ -1,7 +1,7 @@
 export const AppPaths = {
   HOME: '/',
-  auth: {
-    SIGN_IN: '/auth/sing-in',
+  AUTH: {
+    SIGN_IN: '/auth/sign-in',
     SIGN_UP: '/auth/sign-up',
   },
 };

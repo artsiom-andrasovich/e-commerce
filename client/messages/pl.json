@@ -1,0 +1,15 @@
+{
+  "Footer": {
+    "copyright": "Poland. Wszelkie prawa zastrzeżone."
+  },
+  "Metadata":{
+    "description" : "E-Commerce - platforma zakupowa сzyli szeroki wybór produktów"
+  },
+  "Auth": {
+    "sign-in": "Zaloguj się",
+    "sign-up": "Zarejestruj się"
+  },
+  "UserDropdown": {
+    "cart": "Koszyk"
+  }
+}
