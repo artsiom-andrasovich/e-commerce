@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import { createCategoryDto } from 'src/categories/dto/create-category.dto';
 import { z } from 'zod';
 import { validateRequest } from 'zod-express-middleware';
 import { categoriesController } from './categories.controller';
-import { updateCategoryDto } from './dto';
+import { createCategoryDto, updateCategoryDto } from './dto';
 
 const router = Router();
 

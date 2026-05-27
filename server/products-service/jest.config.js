@@ -13,6 +13,9 @@ module.exports = {
     '^@middlewares$': '<rootDir>/src/middlewares',
     '^@middlewares/(.*)$': '<rootDir>/src/middlewares/$1',
 
+    '^@products$': '<rootDir>/src/products',
+    '^@products/(.*)$': '<rootDir>/src/products/$1',
+
     '^src/(.*)$': '<rootDir>/src/$1',
   },
 };
