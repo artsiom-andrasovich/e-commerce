@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-import { categoriesService } from './categories.service';
-import { TUpdateCategory } from './dto';
+import { TUpdateCategory } from "@app/lib-shared-types";
+import { NextFunction, Request, Response } from "express";
+import { categoriesService } from "./categories.service";
 class CategoriesController {
   public async getAllCategories(
     req: Request,

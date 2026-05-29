@@ -1,0 +1,13 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter @app/gateway run dev\" \"pnpm --filter @app/products-service run dev\"",
+    "test": "concurrently \"pnpm --filter @app/products-service run test\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.0"
+  }
+}

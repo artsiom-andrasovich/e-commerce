@@ -1,6 +1,6 @@
-import { ApiError } from '@utils';
-import { TCreateCategory, TUpdateCategory } from './dto';
-import { Category } from './model';
+import { TCreateCategory, TUpdateCategory } from "@app/lib-shared-types";
+import { ApiError } from "@utils";
+import { Category } from "./model";
 
 class CategoriesService {
   public async getAllCategories(limit: number, cursor: string | undefined) {
@@ -31,7 +31,7 @@ class CategoriesService {
   public async createCategory(dto: TCreateCategory) {
     const category = await Category.findOne({ name: dto.name }).exec();
     if (category) {
-      throw ApiError.BadRequest('Category with this name already exists');
+      throw ApiError.BadRequest("Category with this name already exists");
     }
     const newCategory = await Category.create({ ...dto });
     return newCategory;
