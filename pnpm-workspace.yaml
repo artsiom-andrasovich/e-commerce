@@ -1,0 +1,8 @@
+packages:
+  - "apps/client"
+  - "apps/server/*"
+  - "packages/*"
+allowBuilds:
+  mongodb-memory-server: true
+  sharp: true
+  unrs-resolver: true
