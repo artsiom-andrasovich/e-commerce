@@ -16,7 +16,7 @@ router.post(
   productsController.createProduct
 );
 
-router.put(
+router.patch(
   "/",
   validateRequest({ body: updateProductDto }),
   productsController.updateProduct
@@ -24,7 +24,7 @@ router.put(
 
 router.delete(
   "/:productId",
-  validateRequest({ params: z.object({ categoryId: z.string().min(1) }) }),
+  validateRequest({ params: z.object({ productId: z.string().min(1) }) }),
   productsController.deleteProduct
 );
 

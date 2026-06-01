@@ -1,10 +1,20 @@
-import { Schema, model } from 'mongoose';
-const ProductsSchema = new Schema({
-  title: { type: String, required: true },
-  price: { type: Number, required: true },
-  description: { type: String, required: false },
-  imagePath: { type: String, default: 'products/default.png' },
-});
+import mongoose, { Schema, model } from "mongoose";
+const ProductsSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    price: { type: Number, required: true },
+    description: { type: String, required: false },
+    imageKey: { type: String, default: "products/default.png" },
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const Product = model('Product', ProductsSchema);
+const Product = model("Product", ProductsSchema);
 export { Product };

@@ -1,4 +1,4 @@
-import { TUpdateCategory } from "@app/lib-shared-types";
+import { TCreateCategory, TUpdateCategory } from "@app/lib-shared-types";
 import { NextFunction, Request, Response } from "express";
 import { categoriesService } from "./categories.service";
 class CategoriesController {
@@ -23,7 +23,7 @@ class CategoriesController {
 
   public async createCategory(req: Request, res: Response, next: NextFunction) {
     try {
-      const dto = req.body;
+      const dto: TCreateCategory = req.body;
       const newCategory = await categoriesService.createCategory(dto);
       return res.status(201).json(newCategory);
     } catch (e) {

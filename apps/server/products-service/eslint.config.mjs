@@ -19,23 +19,7 @@ export default [
     plugins: {
       prettier: eslintPluginPrettier,
     },
-    rules: {
-      'no-unused-vars': 'error',
-      'no-undef': 'off',
-      'prefer-const': 'error',
-      'no-console': 'warn',
-      'no-debugger': 'warn',
-      'prettier/prettier': [
-        'error',
-        {
-          singleQuote: false,
-          semi: true,
-          trailingComma: 'all',
-          printWidth: 100,
-          tabWidth: 2,
-        },
-      ],
-    },
+
   },
   prettier,
   {

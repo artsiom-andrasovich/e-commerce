@@ -20,14 +20,14 @@ class CategoriesService {
   }
 
   public async getCategory(id: string) {
-    const category = await Category.findOne({ _id: id });
+    const category = await Category.findOne({ _id: id }).exec();
     if (!category) {
       throw ApiError.NotFound(`Category with this _id ${id} does not exists`);
     }
     return category;
   }
 
-  //TODO: make creation and deletion and update of categories only for ADMIN role;
+  //TODO: make creation and deletion and update of categories only for ADMIN role,uncomment within Story 7 on account set up implementation
   public async createCategory(dto: TCreateCategory) {
     const category = await Category.findOne({ name: dto.name }).exec();
     if (category) {
@@ -38,7 +38,7 @@ class CategoriesService {
   }
 
   public async deleteCategory(id: string) {
-    const deletedCategory = await Category.findByIdAndDelete(id);
+    const deletedCategory = await Category.findByIdAndDelete(id).exec();
     if (!deletedCategory) {
       throw ApiError.NotFound(`Category with this _id ${id} does not exists`);
     }
