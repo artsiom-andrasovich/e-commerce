@@ -14,15 +14,19 @@ class ProductsService {
   public async getProducts(
     categoryId: string | undefined,
     limit: number,
-    cursor: string | undefined
+    cursor: string | undefined,
+    search: string | undefined
   ) {
-    const query: { categoryId?: string; _id?: unknown } = {};
+    const query: { categoryId?: string; _id?: unknown; $text?: unknown } = {};
 
     if (categoryId) {
       query.categoryId = categoryId;
     }
     if (cursor) {
       query._id = { $gt: cursor };
+    }
+    if (search) {
+      query.$text = { $search: search };
     }
 
     const products = await Product.find(query)

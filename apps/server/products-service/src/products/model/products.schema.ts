@@ -15,6 +15,14 @@ const ProductsSchema = new Schema(
     timestamps: true,
   }
 );
-
+ProductsSchema.index(
+  { title: "text", description: "text" },
+  {
+    weights: {
+      title: 5,
+      description: 2,
+    },
+  }
+);
 const Product = model("Product", ProductsSchema);
 export { Product };

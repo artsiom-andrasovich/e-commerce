@@ -77,6 +77,67 @@ describe("GET /api/products", () => {
 
     expect(resPage2.body.nextCursor).toBeNull();
   });
+
+  it("Have to return products matching the search query in title", async () => {
+    const category = await Category.create({ name: "Laptops" });
+    await Product.create({
+      title: "MacBook Air",
+      price: 1000,
+      categoryId: category._id,
+    });
+    await Product.create({
+      title: "Dell XPS",
+      price: 1200,
+      categoryId: category._id,
+    });
+
+    const res = await request(app).get("/api/products?search=MacBook");
+
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].title).toBe("MacBook Air");
+  });
+
+  it("Have to return products matching the search query in description", async () => {
+    const category = await Category.create({ name: "Accessories" });
+    await Product.create({
+      title: "Laptop Sleeve",
+      description: "High quality leather sleeve for 13 inch laptops",
+      price: 50,
+      categoryId: category._id,
+    });
+    await Product.create({
+      title: "Wireless Mouse",
+      description: "Ergonomic plastic mouse",
+      price: 30,
+      categoryId: category._id,
+    });
+
+    const res = await request(app).get("/api/products?search=leather");
+
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].title).toBe("Laptop Sleeve");
+  });
+
+  it("Have to return empty array if no products match the search query", async () => {
+    const category = await Category.create({ name: "Laptops" });
+    await Product.create({
+      title: "MacBook Air",
+      price: 1000,
+      categoryId: category._id,
+    });
+
+    const res = await request(app).get("/api/products?search=Samsung");
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        data: [],
+        nextCursor: null,
+      })
+    );
+  });
 });
 
 describe("GET /api/products/:id", () => {

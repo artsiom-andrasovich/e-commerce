@@ -8,10 +8,12 @@ class ProductsController {
       const limit = parseInt(req.query.limit as string, 10) || 10;
       const cursor = req.query.cursor as string | undefined;
       const categoryId = req.query.categoryId as string | undefined;
+      const search = req.query.search as string | undefined;
       const products = await productsService.getProducts(
         categoryId,
         limit,
-        cursor
+        cursor,
+        search
       );
       return res.status(200).json(products);
     } catch (e) {
