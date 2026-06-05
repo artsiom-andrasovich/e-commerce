@@ -1,10 +1,10 @@
-import { Container } from '@/components/Container';
-import { APP_NAME } from '@/constants';
-import { AppPaths } from '@/constants/app-paths';
-import { Link } from '@/i18n';
-import { CirclePercent } from 'lucide-react';
-import { AuthButtons } from './AuthButtons';
-import { UserDropdown } from './UserDropdown';
+import { Container } from "@/components/Container";
+import { APP_NAME } from "@/constants";
+import { AppPaths } from "@/constants/app-paths";
+import { Link } from "@/i18n";
+import { CirclePercent } from "lucide-react";
+import { AuthButtons } from "./AuthButtons";
+import { UserDropdown } from "./UserDropdown";
 
 export function Header() {
   //TODO: uncomment within Story 7 on account set up implementation

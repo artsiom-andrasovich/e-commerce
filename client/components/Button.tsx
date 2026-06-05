@@ -1,21 +1,25 @@
-import { PropsWithChildren } from 'react';
-import { getButtonVariants, TButtonVariants } from './Button.styles';
+import { ComponentPropsWithoutRef, ElementType } from "react";
+import { getButtonVariants, TButtonVariants } from "./Button.styles";
 
-type TButtonProps = TButtonVariants & React.ComponentProps<'button'>;
+export type TButtonProps<T extends ElementType> = TButtonVariants & {
+  as?: T;
+} & ComponentPropsWithoutRef<T>;
 
-export function Button({
+export function Button<T extends ElementType = "button">({
+  as,
   children,
   variant,
   size,
   className,
   ...props
-}: PropsWithChildren<TButtonProps>) {
+}: TButtonProps<T>) {
+  const Component = as || "button";
   return (
-    <button
+    <Component
       className={getButtonVariants({ variant, size, className })}
       {...props}
     >
       {children}
-    </button>
+    </Component>
   );
 }

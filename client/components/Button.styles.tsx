@@ -1,15 +1,15 @@
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 const variants = {
   variant: {
-    default: 'bg-primary text-primary-background',
-    outline: 'border border-input bg-background',
-    ghost: 'hover:bg-accent hover:text-accent-foreground',
+    default: "bg-primary text-foreground",
+    outline: "border border-input bg-background",
+    ghost: "hover:bg-slate-100 hover:text-slate-900",
   },
   size: {
-    default: 'h-10 px-4 py-2',
-    sm: 'h-9 rounded-md px-3',
-    lg: 'h-11 rounded-md px-8',
+    default: "h-10 px-4 py-2",
+    sm: "h-9 rounded-md px-3",
+    lg: "h-11 rounded-md px-8",
   },
 } as const;
 
@@ -20,8 +20,8 @@ export type TButtonVariants = {
 };
 
 export function getButtonVariants({
-  variant = 'default',
-  size = 'default',
+  variant = "default",
+  size = "default",
   className,
 }: TButtonVariants) {
   return cn(variants.variant[variant], variants.size[size], className);

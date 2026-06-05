@@ -1,32 +1,25 @@
-'use client';
-import { Button } from '@/components/Button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/dropdown-menu/';
-import { ShoppingBasket, User } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import LocaleSwitcher from './LocaleSwitcher';
+"use client";
+import { Button } from "@/components/Button";
+import { Dropdown } from "@/components/Dropdown";
+import { ShoppingBasket, User } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { DropdownMenuContent, DropdownMenuTrigger } from "./DropdownMenu";
+import { LocaleSwitcher } from "./LocaleSwitcher";
 
 export function UserDropdown() {
-  const t = useTranslations('UserDropdown');
+  const t = useTranslations("UserDropdown");
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <div className="rounded-full border-[2px] border- flex items-center justify-center h-12 w-12 border-foreground text-foreground ">
-            <User className="h-8 w-8" />
-          </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-background border-2 p-2 right-0 ">
-          <Button variant="ghost" className="flex flex-row gap-2 ">
-            <ShoppingBasket />
-            {t('cart')}
-          </Button>
-          <LocaleSwitcher className="w-full" />
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
+    <Dropdown>
+      <DropdownMenuTrigger className="rounded-full border-[2px] flex items-center justify-center h-12 w-12 border-foreground text-foreground p-0">
+        <User className="h-8 w-8" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="bg-background border-2 p-2 right-0 ">
+        <Button variant="ghost" className="flex flex-row gap-2 ">
+          <ShoppingBasket />
+          {t("cart")}
+        </Button>
+        <LocaleSwitcher className="w-full" />
+      </DropdownMenuContent>
+    </Dropdown>
   );
 }
