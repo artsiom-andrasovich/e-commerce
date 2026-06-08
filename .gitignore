@@ -9,3 +9,7 @@ server/build/
 
 # Env files
 .env
+
+# Logs
+logs
+*.log

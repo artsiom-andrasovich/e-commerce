@@ -21,31 +21,19 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "noImplicitAny": true,
     "skipLibCheck": true,
     "ignoreDeprecations": "6.0",
     "types": ["jest", "node"],
     "baseUrl": "./",
     "paths": {
-      "@utils":[
-        "src/utils/"
-      ],
-      "@utils/*":[
-        "src/utils/*"
-      ],
-      "@categories":[
-        "src/categories/"
-      ],
-      "@categories/*":[
-        "src/categories/*"
-      ],
-      "@middlewares":[
-        "src/middlewares/"
-      ],
-      "@middlewares/*":[
-        "src/middlewares/*"
-      ],
+      "@utils": ["src/utils/"],
+      "@utils/*": ["src/utils/*"],
+      "@categories": ["src/categories/"],
+      "@categories/*": ["src/categories/*"],
+      "@middlewares": ["src/middlewares/"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@configs": ["src/configs/"],
+      "@configs/*": ["src/configs/*"]
     }
   }
 }
-

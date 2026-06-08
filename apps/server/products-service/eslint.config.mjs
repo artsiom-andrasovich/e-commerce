@@ -27,11 +27,12 @@ export default [
       'prettier/prettier': [
         'error',
         {
-          singleQuote: true,
+          singleQuote: false,
           semi: true,
           trailingComma: 'all',
           printWidth: 100,
-          tabWidth: 2,
+          tabWidth: 4,
+          useTabs: true,
         },
       ],
     },
