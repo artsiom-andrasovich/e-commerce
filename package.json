@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"pnpm --filter @app/gateway run dev\" \"pnpm --filter @app/products-service run dev\"",
+    "dev": "concurrently \"pnpm --filter @app/gateway run dev\" \"pnpm --filter @app/products-service run dev\" \"pnpm --filter @app/client run dev\"",
     "test": "concurrently \"pnpm --filter @app/products-service run test\""
   },
   "devDependencies": {
