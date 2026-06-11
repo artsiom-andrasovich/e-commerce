@@ -1,0 +1,15 @@
+{
+  "Footer": {
+    "copyright": "Poland. All rights reserved."
+  },
+  "Metadata": {
+    "description": "E-Commerce - platform for buying different products "
+  },
+  "Auth": {
+    "sign-in": "Sign in",
+    "sign-up": "Sign up"
+  },
+  "UserDropdown": {
+    "cart": "Cart"
+  }
+}
