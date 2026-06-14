@@ -1,13 +1,14 @@
-import { ApiError } from '@utils';
-import { NextFunction, Request, Response } from 'express';
+import { logger } from "@configs";
+import { ApiError } from "@utils";
+import { NextFunction, Request, Response } from "express";
 
 export function errorMiddleware(
   err: Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
-  console.log(err);
+  logger.error(err);
 
   if (err instanceof ApiError) {
     return res.status(err.status).json({
@@ -16,5 +17,5 @@ export function errorMiddleware(
     });
   }
 
-  return res.status(500).json({ message: 'Internal server error' });
+  return res.status(500).json({ message: "Internal server error" });
 }

@@ -13,8 +13,8 @@ module.exports = {
     '^@middlewares$': '<rootDir>/src/middlewares',
     '^@middlewares/(.*)$': '<rootDir>/src/middlewares/$1',
 
-    '^@products$': '<rootDir>/src/products',
-    '^@products/(.*)$': '<rootDir>/src/products/$1',
+    '^@configs$': '<rootDir>/src/configs',
+    '^@configs/(.*)$': '<rootDir>/src/configs/$1',
 
     '^src/(.*)$': '<rootDir>/src/$1',
   },
