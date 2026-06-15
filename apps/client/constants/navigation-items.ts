@@ -1,9 +1,9 @@
-import { Home } from 'lucide-react';
-import { AppPaths } from './app-paths';
+import { Home } from "lucide-react";
+import { AppPaths } from "./app-paths";
 
 export const navigationItems = [
   {
-    name: 'Home',
+    name: "Home",
     href: AppPaths.HOME,
     icon: Home,
   },
