@@ -3,8 +3,14 @@ import { Footer } from "@/containers/Footer";
 import { Header } from "@/containers/Header";
 import { Sidebar } from "@/containers/Sidebar";
 import { routing } from "@/i18n";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { RootProvider } from "@/providers";
+import { hasLocale } from "next-intl";
+import {
+  getMessages,
+  getTranslations,
+  setRequestLocale,
+  getTimeZone,
+} from "next-intl/server";
 import { DM_Sans, IBM_Plex_Mono, Lora } from "next/font/google";
 import { notFound } from "next/navigation";
 import "./globals.css";
@@ -55,6 +61,8 @@ export default async function RootLayout({
   }
 
   setRequestLocale(locale);
+  const messages = await getMessages();
+  const timeZone = await getTimeZone();
 
   return (
     <html
@@ -63,14 +71,14 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col ">
-        <NextIntlClientProvider>
+        <RootProvider messages={messages} locale={locale} timeZone={timeZone}>
           <Header />
           <main className="flex-1 items-stretch flex bg-white/30">
             <Sidebar />
             {children}
           </main>
           <Footer />
-        </NextIntlClientProvider>
+        </RootProvider>
       </body>
     </html>
   );
