@@ -1,7 +1,6 @@
 import { z } from "zod";
 export const updateProductDto = z
   .object({
-    _id: z.string().min(1),
     title: z.string().min(1).max(30).optional(),
     categoryId: z.string().max(30).optional(),
     price: z
@@ -16,6 +15,6 @@ export const updateProductDto = z
       price !== undefined ||
       description !== undefined ||
       categoryId !== undefined,
-    { message: "One of the fields must be defined" }
+    { message: "One of the fields must be defined" },
   );
 export type TUpdateProduct = z.infer<typeof updateProductDto>;

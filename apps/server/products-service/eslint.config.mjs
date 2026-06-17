@@ -12,14 +12,30 @@ export default [
       parser: tseslint.parser,
       parserOptions: {
         project: './tsconfig.eslint.json',
-        tsconfigRootDir: import.meta.dirname,
         sourceType: 'module',
       },
     },
     plugins: {
       prettier: eslintPluginPrettier,
     },
-
+    rules: {
+      'no-unused-vars': 'error',
+      'no-undef': 'off',
+      'prefer-const': 'error',
+      'no-console': 'warn',
+      'no-debugger': 'warn',
+      'prettier/prettier': [
+        'error',
+        {
+          singleQuote: false,
+          semi: true,
+          trailingComma: 'all',
+          printWidth: 100,
+          tabWidth: 4,
+          useTabs: true,
+        },
+      ],
+    },
   },
   prettier,
   {

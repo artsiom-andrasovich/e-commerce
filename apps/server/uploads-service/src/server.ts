@@ -1,16 +1,15 @@
 import dotenv from "dotenv";
 import app from "./app";
-
-dotenv.config();
-const PORT: number = 3005;
+import { env } from "./configs/env";
+import { logger } from "./configs/logger";
 
 const start = async () => {
   try {
-    app.listen(PORT, () => {
-      console.log(`Upload service started on port = ${PORT}`);
+    app.listen(env.PORT, () => {
+      logger.info(`Upload service started on port = ${env.PORT}`);
     });
   } catch (e) {
-    console.log(e);
+    logger.error(e);
   }
 };
 

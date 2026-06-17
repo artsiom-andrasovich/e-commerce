@@ -3,10 +3,12 @@ import { ApiError } from "@utils";
 import { Product } from "./model";
 
 class ProductsService {
-  public async getProduct(_id: string) {
-    const product = await Product.findById(_id).exec();
+  public async getProduct(productId: string) {
+    const product = await Product.findById(productId).exec();
     if (!product) {
-      throw ApiError.NotFound(`Product with this _id ${_id} does not exists`);
+      throw ApiError.NotFound(
+        `Product with this _id ${productId} does not exists`,
+      );
     }
     return product;
   }
@@ -31,47 +33,52 @@ class ProductsService {
 
     const products = await Product.find(query)
       .sort({ _id: 1 })
-      .limit(limit)
+      .limit(limit + 1)
       .exec();
 
-    const hasMore = products.length === limit;
-    const nextCursor = hasMore ? products[products.length - 1]._id : null;
+    const hasMore = products.length > limit;
+    const responseProducts = hasMore ? products.slice(0, limit) : products;
+    const nextCursor = hasMore
+      ? responseProducts[responseProducts.length - 1]._id
+      : null;
 
     return {
-      data: products,
+      data: responseProducts,
       nextCursor,
     };
   }
 
   //TODO: check role for create, update and delete, uncomment within Story 7 on account set up implementation
   public async createProduct(dto: TCreateProduct) {
-    const newCategory = await Product.create({ ...dto });
-    return newCategory;
+    const newProduct = await Product.create({ ...dto });
+    return newProduct;
   }
 
-  public async updateProduct(dto: TUpdateProduct) {
-    const { _id, ...updateData } = dto;
-
+  public async updateProduct(productId: string, dto: TUpdateProduct) {
     const updatedProduct = await Product.findByIdAndUpdate(
-      _id,
+      productId,
       {
-        $set: updateData,
+        $set: dto,
       },
-      { new: true }
+      { new: true },
     ).exec();
     if (!updatedProduct) {
-      throw ApiError.NotFound(`Product with this _id ${_id} does not exists`);
+      throw ApiError.NotFound(
+        `Product with this _id ${productId} does not exists`,
+      );
     }
 
     return updatedProduct;
   }
 
-  public async deleteProduct(_id: string) {
-    const deletedProduct = await Product.findByIdAndDelete(_id).exec();
+  public async deleteProduct(productId: string) {
+    const deletedProduct = await Product.findByIdAndDelete(productId).exec();
     if (!deletedProduct) {
-      throw ApiError.NotFound(`Product with this _id ${_id} does not exists`);
+      throw ApiError.NotFound(
+        `Product with this _id ${productId} does not exists`,
+      );
     }
-    return deletedProduct;
+    return;
   }
 }
 
