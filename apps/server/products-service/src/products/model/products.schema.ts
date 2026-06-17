@@ -13,6 +13,14 @@ const ProductsSchema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+      versionKey: false,
+      transform: function (doc, ret) {
+        const { _id, ...rest } = ret;
+        return rest;
+      },
+    },
   }
 );
 

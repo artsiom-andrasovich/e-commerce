@@ -1,4 +1,5 @@
 import { router as categoriesRoutes } from "@categories/categories.route";
+import { router as productsRoutes } from "./products/products.route";
 import { logger } from "@configs";
 import { errorMiddleware } from "@middlewares";
 import dotenv from "dotenv";
@@ -21,6 +22,7 @@ app.use(
 app.use(express.json());
 
 app.use("/api/categories", categoriesRoutes);
+app.use("/api/products", productsRoutes);
 
 app.use(
 	expressWinston.errorLogger({

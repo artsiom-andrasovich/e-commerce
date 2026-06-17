@@ -1,9 +1,18 @@
-import { Container } from '@/components/Container';
+import { ProductGrid, fetchProducts } from "@/containers/ProductGrid/";
 
-export default function Home() {
+export default async function Home(props: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParams = await props.searchParams;
+  const categoryId =
+    typeof searchParams?.categoryId === "string"
+      ? searchParams.categoryId
+      : null;
+  const initialData = await fetchProducts(categoryId, undefined);
+
   return (
-    <>
-      <Container className="flex flex-1 items-stretch"></Container>
-    </>
+    <div className="mx-auto max-w-7xl">
+      <ProductGrid categoryId={categoryId} initialData={initialData} />
+    </div>
   );
 }
