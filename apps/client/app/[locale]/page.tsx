@@ -1,4 +1,5 @@
 import { ProductGrid, fetchProducts } from "@/containers/ProductGrid/";
+import { SearchBar } from "@/containers/SearchBar";
 
 export default async function Home(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -8,11 +9,16 @@ export default async function Home(props: {
     typeof searchParams?.categoryId === "string"
       ? searchParams.categoryId
       : null;
-  const initialData = await fetchProducts(categoryId, undefined);
+  const search =
+    typeof searchParams?.search === "string"
+      ? searchParams.search
+      : null;
+  const initialData = await fetchProducts(categoryId, search, undefined);
 
   return (
     <div className="mx-auto max-w-7xl">
-      <ProductGrid categoryId={categoryId} initialData={initialData} />
+      <SearchBar />
+      <ProductGrid categoryId={categoryId} search={search} initialData={initialData} />
     </div>
   );
 }

@@ -9,12 +9,17 @@ import { useProducts } from "./useProducts";
 
 type ProductGridProps = {
   categoryId?: string | null;
+  search?: string | null;
   initialData?: TGetProductsResponse;
 };
 
-export const ProductGrid = ({ categoryId, initialData }: ProductGridProps) => {
+export const ProductGrid = ({
+  categoryId,
+  search,
+  initialData,
+}: ProductGridProps) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useProducts(categoryId, initialData);
+    useProducts(categoryId, search, initialData);
 
   const { ref, inView } = useInView({
     rootMargin: "200px",
@@ -51,13 +56,15 @@ export const ProductGrid = ({ categoryId, initialData }: ProductGridProps) => {
 
   if (products.length === 0) {
     return (
-      <div className="flex min-h-[400px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center">
-        <div className="rounded-full bg-gray-100 p-4">
-          <ShoppingBag className="h-8 w-8 text-gray-400" strokeWidth={1.5} />
-        </div>
-        <h3 className="mt-4 text-lg font-semibold text-gray-900">
-          No products found
-        </h3>
+      <div className="flex min-h-[400px] items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center">
+        <span className="flex flex-col items-center justify-center">
+          <div className="rounded-full bg-gray-100 p-4">
+            <ShoppingBag className="h-8 w-8 text-gray-400" strokeWidth={1.5} />
+          </div>
+          <h3 className="mt-4 text-lg font-semibold text-gray-900">
+            No products found
+          </h3>
+        </span>
         <p className="mt-2 text-sm text-gray-500 max-w-sm">
           We couldn't find any products in this category. Try selecting a
           different category or check back later.
