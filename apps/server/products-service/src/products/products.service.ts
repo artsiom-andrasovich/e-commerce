@@ -17,7 +17,7 @@ class ProductsService {
     categoryId: string | undefined,
     limit: number,
     cursor: string | undefined,
-    search: string | undefined
+    search: string | undefined,
   ) {
     const query: { categoryId?: string; _id?: unknown; $text?: unknown } = {};
 
@@ -43,7 +43,13 @@ class ProductsService {
       : null;
 
     return {
-      data: responseProducts,
+      data: responseProducts.map((product) => {
+        const obj = product.toJSON();
+        return {
+          ...obj,
+          imageKey: obj.imageKey?.[0] ?? null,
+        };
+      }),
       nextCursor,
     };
   }

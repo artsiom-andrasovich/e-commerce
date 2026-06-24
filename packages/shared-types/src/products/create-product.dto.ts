@@ -5,6 +5,6 @@ export const createProductDto = z.object({
   price: z.number().positive({ message: "Price must be positive" }),
   description: z.string().max(400).optional(),
   categoryId: zodObjectIdSchema,
-  imageKey: z.string().max(100).optional(),
+  imageKey: z.array(z.string().max(100)).optional(),
 });
 export type TCreateProduct = z.infer<typeof createProductDto>;

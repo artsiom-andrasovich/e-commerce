@@ -1,11 +1,17 @@
+import { cn } from "@/lib/utils";
 import { fetchCategories } from "./Categories/actions";
 import { CategoryList } from "./Categories/CategoryList";
 import { NavigationList } from "./Navigation/NavigationList";
 
-export async function Sidebar() {
+export async function Sidebar({ className }: { className?: string }) {
   const { data, nextCursor } = await fetchCategories();
   return (
-    <aside className="w-64 shrink-0 p-4 bg-background border rounded-md flex flex-col space-y-6">
+    <aside
+      className={cn(
+        className,
+        ` shrink-0 p-4 bg-background border rounded-md flex flex-col space-y-6`,
+      )}
+    >
       <NavigationList />
 
       <div className="h-px w-full bg-border" />

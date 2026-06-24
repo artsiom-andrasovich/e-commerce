@@ -42,16 +42,18 @@ class UploadService {
     return { finalFileName, uploadUrl };
   }
 
-  public async getAccessUrl(key: string) {
-    const command = new GetObjectCommand({
-      Bucket: env.AWS_S3_BUCKET_NAME,
-      Key: key,
-    });
-    const signedUrl = await getSignedUrl(this.s3Client, command, {
-      expiresIn: 3600,
+  public async getAccessUrls(keys: string[]) {
+    const promises = keys.map((key) => {
+      const command = new GetObjectCommand({
+        Bucket: env.AWS_S3_BUCKET_NAME,
+        Key: key,
+      });
+      return getSignedUrl(this.s3Client, command, {
+        expiresIn: 3600,
+      });
     });
 
-    return signedUrl;
+    return Promise.all(promises);
   }
 
   public async deleteFile(path: string) {

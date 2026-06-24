@@ -1,4 +1,4 @@
-import { TGenerateUploadUrl } from "@app/lib-shared-types";
+import { TGenerateUploadUrl, TGetSignedUrlsDto } from "@app/lib-shared-types";
 import { NextFunction, Request, Response } from "express";
 import { uploadService } from "./upload.service";
 
@@ -17,15 +17,15 @@ class UploadController {
     }
   }
 
-  public async getAccessUrl(
-    req: Request<{ key: string }>,
+  public async getAccessUrls(
+    req: Request<any, any, TGetSignedUrlsDto>,
     res: Response,
     next: NextFunction,
   ) {
     try {
-      const { key } = req.params;
-      const signedUrl = await uploadService.getAccessUrl(key);
-      return res.status(200).json({ url: signedUrl });
+      const { urls } = req.body;
+      const signedUrls = await uploadService.getAccessUrls(urls);
+      return res.status(200).json({ urls: signedUrls });
     } catch (e) {
       next(e);
     }

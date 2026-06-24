@@ -7,9 +7,15 @@ export const productSchema = z.object({
   price: z.number(),
   description: z.string().optional(),
   categoryId: zodObjectIdSchema,
-  imageKey: z.string().optional(),
+  imageKey: z.array(z.string()).optional(),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
 });
 
 export type TProduct = z.infer<typeof productSchema>;
+
+export const productListItemSchema = productSchema.extend({
+  imageKey: z.string().optional(),
+});
+
+export type TProductListItem = z.infer<typeof productListItemSchema>;

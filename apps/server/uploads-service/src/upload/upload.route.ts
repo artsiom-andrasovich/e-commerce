@@ -1,4 +1,4 @@
-import { generateUploadUrlDto } from "@app/lib-shared-types";
+import { generateUploadUrlDto, getSignedUrlsDto } from "@app/lib-shared-types";
 import { Router } from "express";
 import z from "zod";
 import { validateRequest } from "zod-express-middleware";
@@ -11,10 +11,10 @@ router.post(
   validateRequest({ body: generateUploadUrlDto }),
   uploadController.generateUploadUrl,
 );
-router.get(
-  "/:key",
-  validateRequest({ params: z.object({ key: z.string().min(1).max(50) }) }),
-  uploadController.getAccessUrl,
+router.post(
+  "/signed-urls",
+  validateRequest({ body: getSignedUrlsDto }),
+  uploadController.getAccessUrls,
 );
 router.delete(
   "/:key",

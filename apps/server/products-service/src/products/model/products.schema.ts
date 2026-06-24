@@ -4,7 +4,7 @@ const ProductsSchema = new Schema(
     title: { type: String, required: true },
     price: { type: Number, required: true },
     description: { type: String, required: false },
-    imageKey: { type: String, default: "products/default.png" },
+    imageKey: { type: [String], default: ["products/default.png"] },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",

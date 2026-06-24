@@ -1,26 +1,29 @@
 "use client";
 
 import { Button } from "@/components/Button";
-import type { TProduct } from "@app/lib-shared-types";
+import { useProductSignedUrls } from "@/hooks/useProductSignedUrl";
+import { Link } from "@/i18n/navigation";
+import type { TProductListItem } from "@app/lib-shared-types";
 import { ImageOff } from "lucide-react";
 import Image from "next/image";
-import { useSignedUrl } from "./useSignedUrl";
 
 type ProductCardProps = {
-  product: TProduct;
+  product: TProductListItem;
 };
 
 export const ProductCard = ({ product }: ProductCardProps) => {
-  const { data: signedUrl } = useSignedUrl(product.imageKey);
-
+  const { data: signedUrl } = useProductSignedUrls(product.imageKey);
   const imageUrl = signedUrl || null;
 
   return (
-    <div className="flex flex-col h-[440px] border border-gray-200 rounded-lg overflow-hidden bg-white shadow">
+    <Link
+      href={`/product/${product.id}`}
+      className="flex flex-col h-[440px] border border-gray-200 rounded-lg overflow-hidden bg-white shadow"
+    >
       <div className="w-full h-56 shrink-0 bg-gray-100 flex items-center justify-center p-4">
         {imageUrl ? (
           <Image
-            src={imageUrl}
+            src={imageUrl as string}
             alt={product.title}
             width={200}
             height={200}
@@ -52,6 +55,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           <Button className="w-full">Add to Cart</Button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

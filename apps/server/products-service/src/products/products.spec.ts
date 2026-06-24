@@ -12,7 +12,7 @@ describe("GET /api/products", () => {
       expect.objectContaining({
         data: [],
         nextCursor: null,
-      })
+      }),
     );
   });
 
@@ -67,7 +67,7 @@ describe("GET /api/products", () => {
     const cursor = resPage1.body.nextCursor;
 
     const resPage2 = await request(app).get(
-      `/api/products?limit=2&cursor=${cursor}`
+      `/api/products?limit=2&cursor=${cursor}`,
     );
 
     expect(resPage2.status).toBe(200);
@@ -135,8 +135,41 @@ describe("GET /api/products", () => {
       expect.objectContaining({
         data: [],
         nextCursor: null,
-      })
+      }),
     );
+  });
+
+  it("Have to return imageKey as a single string (first element) in list response", async () => {
+    const category = await Category.create({ name: "Laptops" });
+    await Product.create({
+      title: "MacBook Air",
+      price: 1000,
+      categoryId: category._id,
+      imageKey: ["products/dell.png", "products/dell-1.png"],
+    });
+
+    const res = await request(app).get("/api/products");
+
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(typeof res.body.data[0].imageKey).toBe("string");
+    expect(res.body.data[0].imageKey).toBe("products/dell.png");
+  });
+
+  it("Have to return null imageKey in list response when imageKey array is empty", async () => {
+    const category = await Category.create({ name: "Laptops" });
+    await Product.create({
+      title: "Product without image",
+      price: 500,
+      categoryId: category._id,
+      imageKey: [],
+    });
+
+    const res = await request(app).get("/api/products");
+
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].imageKey).toBeNull();
   });
 });
 
@@ -154,10 +187,10 @@ describe("GET /api/products/:id", () => {
     expect(res.status).toBe(200);
     expect(res.body).toEqual(
       expect.objectContaining({
-        _id: product._id.toString(),
+        id: product._id.toString(),
         title: "MacBook Pro",
         price: 2000,
-      })
+      }),
     );
   });
 
@@ -169,7 +202,7 @@ describe("GET /api/products/:id", () => {
     expect(res.body).toEqual(
       expect.objectContaining({
         message: `Product with this _id ${fakeId} does not exists`,
-      })
+      }),
     );
   });
 });
@@ -189,7 +222,7 @@ describe("POST /api/products", () => {
     expect(res.body).toEqual(
       expect.objectContaining({
         title: "MacBook Air",
-      })
+      }),
     );
   });
 });
@@ -204,40 +237,39 @@ describe("PATCH /api/products", () => {
     });
 
     const product_id = (await request(app).get("/api/products")).body.data[0]
-      ._id;
+      .id;
     const updateProductDto = {
-      _id: product_id,
       title: "Dell XPS",
     };
 
     const res = await request(app)
-      .patch(`/api/products`)
+      .patch(`/api/products/${product_id}`)
       .send(updateProductDto);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(
       expect.objectContaining({
-        _id: updateProductDto._id,
+        id: product_id,
         title: updateProductDto.title,
-      })
+      }),
     );
   });
 
   it("Have to throw Not Found if no product with this _id", async () => {
+    const fakeId = "6a1086bc3fbf67a9fb630fb4";
     const updateProductDto = {
-      _id: "6a1086bc3fbf67a9fb630fb4",
       title: "Dell XPS",
     };
     const res = await request(app)
-      .patch(`/api/products`)
+      .patch(`/api/products/${fakeId}`)
       .send(updateProductDto);
 
     expect(res.status).toBe(404);
     expect(res.body).toEqual(
       expect.objectContaining({
         message:
-          "Product with this _id 6a1086bc3fbf67a9fb630fb4 does not exists",
-      })
+          `Product with this _id ${fakeId} does not exists`,
+      }),
     );
   });
 });
@@ -252,7 +284,7 @@ describe("DELETE /api/products", () => {
     });
 
     const product_id = (await request(app).get("/api/products")).body.data[0]
-      ._id;
+      .id;
 
     const res = await request(app).delete(`/api/products/${product_id}`);
     expect(res.status).toBe(204);
@@ -264,13 +296,13 @@ describe("DELETE /api/products", () => {
       expect.objectContaining({
         data: [],
         nextCursor: null,
-      })
+      }),
     );
   });
 
   it("Have to throw Not Found if no product with this _id", async () => {
     const res = await request(app).delete(
-      `/api/products/6a1086bc3fbf67a9fb630fb4`
+      `/api/products/6a1086bc3fbf67a9fb630fb4`,
     );
 
     expect(res.status).toBe(404);
@@ -278,7 +310,7 @@ describe("DELETE /api/products", () => {
       expect.objectContaining({
         message:
           "Product with this _id 6a1086bc3fbf67a9fb630fb4 does not exists",
-      })
+      }),
     );
   });
 });
