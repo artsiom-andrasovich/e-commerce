@@ -55,3 +55,80 @@ describe("GET /api/users/:userId", () => {
     expect(res.status).toBe(400);
   });
 });
+
+describe("PATCH /api/users/:userId", () => {
+  it("Have to update user data in the best scenario", async () => {
+    const user = await User.create({
+      email: "user@example.com",
+      password: "password123",
+      firstName: "John",
+    });
+
+    const jwt = require("jsonwebtoken");
+    const { env } = require("../configs/env");
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      env.JWT_ACCESS_SECRET,
+    );
+
+    const res = await request(app)
+      .patch(`/api/users/${user.id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        firstName: "Jane",
+        lastName: "Smith",
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body.firstName).toBe("Jane");
+    expect(res.body.lastName).toBe("Smith");
+  });
+
+  it("Have to throw 403 Forbidden if updating another user", async () => {
+    const user = await User.create({
+      email: "user@example.com",
+      password: "123",
+    });
+
+    const jwt = require("jsonwebtoken");
+    const { env } = require("../configs/env");
+    const token = jwt.sign(
+      { id: "6a1086bc3fbf67a9fb630fb4", email: "hacker@example.com" },
+      env.JWT_ACCESS_SECRET,
+    );
+
+    const res = await request(app)
+      .patch(`/api/users/${user.id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        firstName: "Hacked",
+      });
+
+    expect(res.status).toBe(403);
+  });
+});
+
+describe("DELETE /api/users/:userId", () => {
+  it("Have to delete user account in the best scenario", async () => {
+    const user = await User.create({
+      email: "user@example.com",
+      password: "password123",
+    });
+
+    const jwt = require("jsonwebtoken");
+    const { env } = require("../configs/env");
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      env.JWT_ACCESS_SECRET,
+    );
+
+    const res = await request(app)
+      .delete(`/api/users/${user.id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.status).toBe(204);
+
+    const checkUser = await User.findById(user.id);
+    expect(checkUser).toBeNull();
+  });
+});
