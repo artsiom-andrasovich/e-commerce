@@ -236,19 +236,19 @@ describe("PATCH /api/products", () => {
       categoryId: category.id,
     });
 
-    const productid = (await request(app).get("/api/products")).body.data[0].id;
+    const productId = (await request(app).get("/api/products")).body.data[0].id;
     const updateProductDto = {
       title: "Dell XPS",
     };
 
     const res = await request(app)
-      .patch(`/api/products/${productid}`)
+      .patch(`/api/products/${productId}`)
       .send(updateProductDto);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(
       expect.objectContaining({
-        id: productid,
+        id: productId,
         title: updateProductDto.title,
       }),
     );
@@ -281,9 +281,9 @@ describe("DELETE /api/products", () => {
       categoryId: category.id,
     });
 
-    const productid = (await request(app).get("/api/products")).body.data[0].id;
+    const productId = (await request(app).get("/api/products")).body.data[0].id;
 
-    const res = await request(app).delete(`/api/products/${productid}`);
+    const res = await request(app).delete(`/api/products/${productId}`);
     expect(res.status).toBe(204);
 
     const allProducts = await request(app).get("/api/products");

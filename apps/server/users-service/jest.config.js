@@ -16,6 +16,12 @@ module.exports = {
     '^@configs$': '<rootDir>/src/configs',
     '^@configs/(.*)$': '<rootDir>/src/configs/$1',
 
+    '^@auth$': '<rootDir>/src/auth',
+    '^@auth/(.*)$': '<rootDir>/src/auth/$1',
+
+    '^@tokens$': '<rootDir>/src/tokens',
+    '^@tokens/(.*)$': '<rootDir>/src/tokens/$1',
+
     '^src/(.*)$': '<rootDir>/src/$1',
   },
 };

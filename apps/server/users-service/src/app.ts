@@ -1,9 +1,11 @@
 import { logger } from "@configs";
 import { errorMiddleware } from "@middlewares";
 import { router as usersRoutes } from "@users/users.route";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import express, { Application } from "express";
 import expressWinston from "express-winston";
+import { router as authRoutes } from "./auth/auth.route";
 
 dotenv.config();
 
@@ -19,8 +21,10 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/users", usersRoutes);
+app.use("/api/auth", authRoutes);
 
 app.use(
   expressWinston.errorLogger({

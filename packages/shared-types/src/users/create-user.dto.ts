@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { zodEmailSchema, zodPasswordSchema } from "../utils";
 
 export const createAddressDto = z.object({
   country: z.string().min(1).max(30),
@@ -9,8 +10,8 @@ export const createAddressDto = z.object({
 });
 
 export const createUserDto = z.object({
-  email: z.email().min(1).max(90),
-  password: z.string().min(8).max(70),
+  email: zodEmailSchema,
+  password: zodPasswordSchema,
   firstName: z.string().min(1).optional(),
   lastName: z.string().min(1).optional(),
   address: createAddressDto.optional(),

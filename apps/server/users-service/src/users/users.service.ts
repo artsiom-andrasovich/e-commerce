@@ -1,6 +1,6 @@
 import { TCreateUser, TUpdateUser } from "@app/lib-shared-types";
 import { ApiError, hashPassword } from "@utils";
-import { User } from "./model";
+import { Address, User } from "./model";
 
 class UsersService {
   public async findById(userId: string) {
@@ -19,11 +19,20 @@ class UsersService {
       );
     }
 
-    const { password, ...rest } = userData;
+    const { password, address, ...rest } = userData;
     const user = await User.create({
       ...rest,
       password: hashPassword(password),
     });
+
+    if (address) {
+      const newAddress = await Address.create({
+        ...address,
+        userId: user._id,
+      });
+      user.addresses.push(newAddress._id);
+      await user.save();
+    }
 
     return await User.findById(user.id).select("-password").exec();
   }

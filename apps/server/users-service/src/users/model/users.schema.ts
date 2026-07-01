@@ -1,12 +1,22 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Document, Schema, model } from "mongoose";
 
-const UsersSchema = new Schema(
+export interface IUser extends Document {
+  email: string;
+  password?: string;
+  firstName?: string;
+  lastName?: string;
+  addresses: mongoose.Types.ObjectId[];
+  tokens: mongoose.Types.ObjectId[];
+}
+
+const UsersSchema = new Schema<IUser>(
   {
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     firstName: { type: String, required: false },
     lastName: { type: String, required: false },
     addresses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
+    tokens: [{ type: mongoose.Schema.Types.ObjectId, ref: "Token" }],
   },
   {
     timestamps: true,
@@ -20,8 +30,6 @@ const UsersSchema = new Schema(
     },
   },
 );
-
-
 
 const User = model("User", UsersSchema);
 export { User };

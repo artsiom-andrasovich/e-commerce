@@ -1,5 +1,5 @@
 import { hashSync } from "bcrypt";
 
 export function hashPassword(password: string) {
-  return hashSync(password, 15);
+	return hashSync(password, 15);
 }

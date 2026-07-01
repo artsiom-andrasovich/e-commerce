@@ -17,7 +17,7 @@ describe("GET /api/users/:userId", () => {
     expect(res.body).toEqual(
       expect.objectContaining({
         id: user.id,
-        email: "john@example.com",
+        email: "user@example.com",
         firstName: "John",
         lastName: "Doe",
       }),

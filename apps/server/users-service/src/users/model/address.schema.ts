@@ -2,7 +2,11 @@ import mongoose, { Schema, model } from "mongoose";
 
 const AddressSchema = new Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     country: { type: String, required: true },
     city: { type: String, required: true },
     street: { type: String, required: true },
@@ -24,4 +28,3 @@ const AddressSchema = new Schema(
 
 const Address = model("Address", AddressSchema);
 export { Address };
-

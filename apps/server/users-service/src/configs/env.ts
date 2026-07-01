@@ -16,6 +16,8 @@ const envSchema = z.object({
     ),
   MONGO_URL: z.url(),
   CLIENT_URL: z.url().default("http://localhost:5050"),
+  NODE_ENV: z.enum(["prod", "dev", "test"]).default("dev"),
+  JWT_ACCESS_SECRET: z.string().min(1),
 });
 
 type Env = z.infer<typeof envSchema>;
