@@ -10,7 +10,7 @@ describe("GET /api/categories", () => {
     expect(res.body).toEqual(
       expect.objectContaining({
         data: [],
-        nextCursor: null,
+        nextPage: null,
       }),
     );
   });
@@ -25,7 +25,7 @@ describe("GET /api/categories", () => {
     expect(res.body.data).toHaveLength(2);
   });
 
-  it("Have to return correct pages with cursor (limit = 2, total = 3)", async () => {
+  it("Have to return correct pages with pagination (limit = 2, total = 3)", async () => {
     await Category.create({ name: "Laptops" });
     await Category.create({ name: "Smartphones" });
     await Category.create({ name: "Tablets" });
@@ -38,13 +38,15 @@ describe("GET /api/categories", () => {
     expect(resPage1.body.data[0].name).toBe("Laptops");
     expect(resPage1.body.data[1].name).toBe("Smartphones");
 
-    expect(resPage1.body.nextCursor).toBeDefined();
-    expect(resPage1.body.nextCursor).not.toBeNull();
+    console.log("resPage1 body:", resPage1.body);
 
-    const cursor = resPage1.body.nextCursor;
+    expect(resPage1.body.nextPage).toBeDefined();
+    expect(resPage1.body.nextPage).toBe(2);
+
+    const nextPage = resPage1.body.nextPage;
 
     const resPage2 = await request(app).get(
-      `/api/categories?limit=2&cursor=${cursor}`,
+      `/api/categories?limit=2&page=${nextPage}`,
     );
 
     expect(resPage2.status).toBe(200);
@@ -52,7 +54,7 @@ describe("GET /api/categories", () => {
     expect(resPage2.body.data).toHaveLength(1);
     expect(resPage2.body.data[0].name).toBe("Tablets");
 
-    expect(resPage2.body.nextCursor).toBeNull();
+    expect(resPage2.body.nextPage).toBeNull();
   });
 
   it("Have to throw 400 if limit is 0", async () => {
@@ -206,7 +208,7 @@ describe("DELETE /api/categories", () => {
     expect(allCategories.body).toEqual(
       expect.objectContaining({
         data: [],
-        nextCursor: null,
+        nextPage: null,
       }),
     );
   });

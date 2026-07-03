@@ -8,9 +8,9 @@ class CategoriesController {
     next: NextFunction,
   ) {
     try {
-      const { limit, cursor } = req.query;
+      const { limit, page } = req.query;
 
-      const categories = await categoriesService.getCategories(limit, cursor);
+      const categories = await categoriesService.getCategories(limit, page);
       return res.status(200).json(categories);
     } catch (e) {
       next(e);

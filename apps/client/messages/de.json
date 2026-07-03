@@ -11,5 +11,9 @@
   },
   "UserDropdown": {
     "cart": "Warenkorb"
+  },
+  "Sidebar": {
+    "categories": "Kategorien",
+    "seeMore": "Mehr anzeigen"
   }
 }

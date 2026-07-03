@@ -1,23 +1,20 @@
 "use client";
 
-import { Link } from "@/i18n";
-import { TCategory } from "@app/lib-shared-types";
-import { useSearchParams } from "next/navigation";
+import { Link, usePathname } from "@/i18n";
 import { cn } from "@/lib/utils";
+import { TCategory } from "@app/lib-shared-types";
 
 type CategoryLinkProps = {
   category: TCategory;
 };
 
 export function CategoryLink({ category }: CategoryLinkProps) {
-  const searchParams = useSearchParams();
-  const currentCategoryId = searchParams.get("categoryId");
-
-  const isActive = currentCategoryId === category.id;
+  const pathname = usePathname();
+  const isActive = pathname.endsWith(`/category/${category.id}`);
 
   return (
     <Link
-      href={`/?categoryId=${category.id}`}
+      href={`/category/${category.id}`}
       className={cn(
         "p-2 text-sm font-medium rounded-md transition-colors",
         isActive

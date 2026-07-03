@@ -13,3 +13,8 @@ server/build/
 # Logs
 logs
 *.log
+
+# Testing
+coverage/
+.nyc_output/
+__snapshots__/

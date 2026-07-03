@@ -3,20 +3,22 @@ import { ApiError } from "@utils";
 import { Category } from "./model";
 
 class CategoriesService {
-	public async getCategories(limit: number, cursor: string | undefined) {
-		const query = cursor ? { _id: { $gt: cursor } } : {};
-		const categories = await Category.find(query)
-			.sort({ _id: 1 })
+	public async getCategories(limit: number, page: number) {
+		const skip = (page - 1) * limit;
+		
+		const categories = await Category.find()
+			.sort({ name: 1 })
+			.skip(skip)
 			.limit(limit + 1)
 			.exec();
 
 		const hasMore = categories.length > limit;
 		const responseCategories = hasMore ? categories.slice(0, limit) : categories;
-		const nextCursor = hasMore ? responseCategories[responseCategories.length - 1]._id : null;
+		const nextPage = hasMore ? page + 1 : null;
 
 		return {
 			data: responseCategories,
-			nextCursor,
+			nextPage,
 		};
 	}
 
