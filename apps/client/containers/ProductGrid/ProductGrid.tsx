@@ -4,6 +4,7 @@ import { TGetProductsResponse } from "@app/lib-shared-types";
 import { ShoppingBag } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useInView } from "@/hooks/useInView";
+import { useTranslations } from "next-intl";
 import { ProductCard } from "./ProductCard";
 import { useProducts } from "./useProducts";
 
@@ -13,6 +14,7 @@ type ProductGridProps = {
 };
 
 export const ProductGrid = ({ categoryId, initialData }: ProductGridProps) => {
+  const t = useTranslations("ProductGrid");
   const { products, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useProducts(categoryId, initialData);
 
@@ -34,11 +36,10 @@ export const ProductGrid = ({ categoryId, initialData }: ProductGridProps) => {
           <ShoppingBag className="h-8 w-8 text-gray-400" strokeWidth={1.5} />
         </div>
         <h3 className="mt-4 text-lg font-semibold text-gray-900">
-          No products found
+          {t("noProducts")}
         </h3>
         <p className="mt-2 text-sm text-gray-500 max-w-sm">
-          We couldn't find any products in this category. Try selecting a
-          different category or check back later.
+          {t("noProductsDesc")}
         </p>
       </div>
     );
@@ -54,7 +55,7 @@ export const ProductGrid = ({ categoryId, initialData }: ProductGridProps) => {
 
       {isFetchingNextPage && (
         <div className="flex justify-center py-4">
-          <p className="text-gray-500">Loading more...</p>
+          <p className="text-gray-500">{t("loadingMore")}</p>
         </div>
       )}
 
@@ -63,7 +64,7 @@ export const ProductGrid = ({ categoryId, initialData }: ProductGridProps) => {
       {!hasNextPage && products.length > 0 && (
         <div className="text-center pb-4">
           <p className="text-sm text-gray-500">
-            You've reached the end of the catalog.
+            {t("endOfCatalog")}
           </p>
         </div>
       )}

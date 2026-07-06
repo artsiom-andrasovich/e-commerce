@@ -1,4 +1,5 @@
 import { TCreateProduct, TUpdateProduct } from "@app/lib-shared-types";
+import { env, logger } from "@configs";
 import { ApiError } from "@utils";
 import { Product } from "./model";
 
@@ -6,11 +7,10 @@ class ProductsService {
   public async getProduct(productId: string) {
     const product = await Product.findById(productId).exec();
     if (!product) {
-      throw ApiError.NotFound(
-        `Product with id ${productId} does not exist`,
-      );
+      throw ApiError.NotFound(`Product with id ${productId} does not exist`);
     }
-    return product;
+    const [enrichedProduct] = await this.enrichWithImageUrls([product.toJSON()]);
+    return enrichedProduct;
   }
 
   public async getProducts(
@@ -38,10 +38,58 @@ class ProductsService {
       ? responseProducts[responseProducts.length - 1]._id
       : null;
 
+    const enrichedProducts = await this.enrichWithImageUrls(
+      responseProducts.map((p) => p.toJSON())
+    );
+
     return {
-      data: responseProducts,
+      data: enrichedProducts,
       nextCursor,
     };
+  }
+
+  private async enrichWithImageUrls(products: any[]) {
+    if (!products || products.length === 0) return products;
+
+    const keys = [
+      ...new Set(
+        products.map((product) => product.imageKey).filter((k) => !!k),
+      ),
+    ];
+    if (keys.length === 0) return products;
+
+    try {
+      const response = await fetch(
+        `${env.UPLOADS_SERVICE_URL}/api/upload/batch`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ keys }),
+        },
+      );
+
+      if (!response.ok) {
+        logger.error(`Failed to fetch image URLs: ${response.statusText}`);
+        return products;
+      }
+
+      const urlsMap: Record<string, string> = await response.json();
+
+      return products.map((product) => {
+        const obj = { ...product };
+
+        if (obj.imageKey && urlsMap[obj.imageKey]) {
+          obj.imageUrl = urlsMap[obj.imageKey];
+        }
+
+        return obj;
+      });
+    } catch (e) {
+      logger.error("Error fetching batch image URLs", e);
+      return products;
+    }
   }
 
   //TODO: check role for create, update and delete, uncomment within Story 7 on account set up implementation
@@ -59,9 +107,7 @@ class ProductsService {
       { new: true },
     ).exec();
     if (!updatedProduct) {
-      throw ApiError.NotFound(
-        `Product with id ${productId} does not exist`,
-      );
+      throw ApiError.NotFound(`Product with id ${productId} does not exist`);
     }
 
     return updatedProduct;
@@ -70,9 +116,7 @@ class ProductsService {
   public async deleteProduct(productId: string) {
     const deletedProduct = await Product.findByIdAndDelete(productId).exec();
     if (!deletedProduct) {
-      throw ApiError.NotFound(
-        `Product with id ${productId} does not exist`,
-      );
+      throw ApiError.NotFound(`Product with id ${productId} does not exist`);
     }
     return;
   }

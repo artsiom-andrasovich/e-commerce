@@ -4,16 +4,15 @@ import { Button } from "@/components/Button";
 import type { TProduct } from "@app/lib-shared-types";
 import { ImageOff } from "lucide-react";
 import Image from "next/image";
-import { useSignedUrl } from "./useSignedUrl";
+import { useTranslations } from "next-intl";
 
 type ProductCardProps = {
   product: TProduct;
 };
 
 export const ProductCard = ({ product }: ProductCardProps) => {
-  const { data: signedUrl } = useSignedUrl(product.imageKey);
-
-  const imageUrl = signedUrl || null;
+  const t = useTranslations("ProductCard");
+  const imageUrl = product.imageUrl || null;
 
   return (
     <div className="flex flex-col h-[440px] border border-gray-200 rounded-lg overflow-hidden bg-white shadow">
@@ -49,7 +48,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         )}
 
         <div className="mt-auto pt-4">
-          <Button className="w-full">Add to Cart</Button>
+          <Button className="w-full">{t("addToCart")}</Button>
         </div>
       </div>
     </div>

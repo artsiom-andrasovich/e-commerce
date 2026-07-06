@@ -1,8 +1,9 @@
+import { zodObjectIdSchema } from "../utils";
 import { z } from "zod";
 export const updateProductDto = z
   .object({
     title: z.string().min(1).max(30).optional(),
-    categoryId: z.string().max(30).optional(),
+    categoryId: zodObjectIdSchema.optional(),
     price: z
       .number()
       .positive({ message: "Price must be positive" })

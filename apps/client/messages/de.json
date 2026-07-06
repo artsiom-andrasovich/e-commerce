@@ -15,5 +15,14 @@
   "Sidebar": {
     "categories": "Kategorien",
     "seeMore": "Mehr anzeigen"
+  },
+  "ProductCard": {
+    "addToCart": "In den Warenkorb"
+  },
+  "ProductGrid": {
+    "noProducts": "Keine Produkte gefunden",
+    "noProductsDesc": "Wir konnten keine Produkte in dieser Kategorie finden. Bitte wählen Sie eine andere Kategorie oder schauen Sie später wieder vorbei.",
+    "loadingMore": "Lade mehr...",
+    "endOfCatalog": "Sie haben das Ende des Katalogs erreicht."
   }
 }

@@ -8,6 +8,7 @@ export const productSchema = z.object({
   description: z.string().optional(),
   categoryId: zodObjectIdSchema,
   imageKey: z.string().optional(),
+  imageUrl: z.url().optional(),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
 });
