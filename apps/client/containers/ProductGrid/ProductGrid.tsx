@@ -2,8 +2,8 @@
 
 import { TGetProductsResponse } from "@app/lib-shared-types";
 import { ShoppingBag } from "lucide-react";
-import { useEffect } from "react";
-import { useInView } from "react-intersection-observer";
+import { useEffect, useRef } from "react";
+import { useInView } from "@/hooks/useInView";
 import { ProductCard } from "./ProductCard";
 import { useProducts } from "./useProducts";
 
@@ -13,10 +13,11 @@ type ProductGridProps = {
 };
 
 export const ProductGrid = ({ categoryId, initialData }: ProductGridProps) => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
+  const { products, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useProducts(categoryId, initialData);
 
-  const { ref, inView } = useInView({
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, {
     rootMargin: "200px",
   });
 
@@ -25,29 +26,6 @@ export const ProductGrid = ({ categoryId, initialData }: ProductGridProps) => {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  const products = data?.pages.flatMap((page) => page.data) || [];
-
-  if (status === "pending") {
-    return (
-      <div className="flex justify-center py-10">
-        <p className="text-gray-500">Loading products...</p>
-      </div>
-    );
-  }
-
-  if (status === "error") {
-    return (
-      <div className="flex min-h-[400px] flex-col items-center justify-center rounded-2xl bg-red-50 p-8 text-center">
-        <h3 className="text-lg font-semibold text-red-800">
-          Something went wrong.
-        </h3>
-        <p className="mt-2 text-sm text-red-600">
-          Failed to load products. Please try again later.
-        </p>
-      </div>
-    );
-  }
 
   if (products.length === 0) {
     return (

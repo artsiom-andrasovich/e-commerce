@@ -7,7 +7,7 @@ class ProductsService {
     const product = await Product.findById(productId).exec();
     if (!product) {
       throw ApiError.NotFound(
-        `Product with this _id ${productId} does not exists`,
+        `Product with id ${productId} does not exist`,
       );
     }
     return product;
@@ -60,7 +60,7 @@ class ProductsService {
     ).exec();
     if (!updatedProduct) {
       throw ApiError.NotFound(
-        `Product with this _id ${productId} does not exists`,
+        `Product with id ${productId} does not exist`,
       );
     }
 
@@ -71,7 +71,7 @@ class ProductsService {
     const deletedProduct = await Product.findByIdAndDelete(productId).exec();
     if (!deletedProduct) {
       throw ApiError.NotFound(
-        `Product with this _id ${productId} does not exists`,
+        `Product with id ${productId} does not exist`,
       );
     }
     return;
