@@ -9,6 +9,8 @@ export const getProductsQuery = z.object({
     .pipe(z.number().int().min(1).max(100)),
   cursor: zodObjectIdSchema.optional(),
   categoryId: zodObjectIdSchema.optional(),
+  lang: z.string().optional(),
+  currency: z.string().optional(),
 });
 
 export type TGetProductsQuery = z.infer<typeof getProductsQuery>;

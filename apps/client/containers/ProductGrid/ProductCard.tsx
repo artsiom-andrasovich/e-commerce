@@ -3,8 +3,8 @@
 import { Button } from "@/components/Button";
 import type { TProduct } from "@app/lib-shared-types";
 import { ImageOff } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 
 type ProductCardProps = {
   product: TProduct;
@@ -12,7 +12,13 @@ type ProductCardProps = {
 
 export const ProductCard = ({ product }: ProductCardProps) => {
   const t = useTranslations("ProductCard");
+  const locale = useLocale();
   const imageUrl = product.imageUrl || null;
+
+  const formattedPrice = new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: product.currency || "USD",
+  }).format(product.price);
 
   return (
     <div className="flex flex-col h-[440px] border border-gray-200 rounded-lg overflow-hidden bg-white shadow">
@@ -36,7 +42,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           {product.title}
         </h3>
         <span className="text-blue-600 font-semibold mt-1">
-          {product.price}$
+          {formattedPrice}
         </span>
 
         {product.description && (

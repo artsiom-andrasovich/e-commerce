@@ -1,18 +1,21 @@
 import { TGetProductsResponse, TProduct } from "@app/lib-shared-types";
-import { useCallback, useState } from "react";
-import { fetchProducts } from "./actions";
+import { useCallback, useEffect, useState } from "react";
+import { fetchProducts } from "./products.actions";
 
 export const useProducts = (
   categoryId?: string | null,
   initialData?: TGetProductsResponse,
 ) => {
-  const [products, setProducts] = useState<TProduct[]>(
-    initialData?.data || [],
-  );
+  const [products, setProducts] = useState<TProduct[]>(initialData?.data || []);
   const [nextCursor, setNextCursor] = useState<string | null>(
     initialData?.nextCursor || null,
   );
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+
+  useEffect(() => {
+    setProducts(initialData?.data || []);
+    setNextCursor(initialData?.nextCursor || null);
+  }, [initialData]);
 
   const hasNextPage = !!nextCursor;
 

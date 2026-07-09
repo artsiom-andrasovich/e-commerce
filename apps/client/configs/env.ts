@@ -7,10 +7,7 @@ const envSchema = z.object({
 
 type Env = z.infer<typeof envSchema>;
 
-const parsed = envSchema.safeParse({
-  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-  NEXT_PUBLIC_UPLOADS_URL: process.env.NEXT_PUBLIC_UPLOADS_URL,
-});
+const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
   console.error("Invalid environment variables:\n", parsed.error);

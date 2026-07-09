@@ -1,14 +1,16 @@
-import { zodObjectIdSchema } from "../utils";
 import { z } from "zod";
+import { LocaleSchema } from "../locales";
+import { zodObjectIdSchema } from "../utils";
+
 export const updateProductDto = z
   .object({
-    title: z.string().min(1).max(30).optional(),
+    title: z.record(LocaleSchema, z.string().min(1).max(30)).optional(),
     categoryId: zodObjectIdSchema.optional(),
     price: z
       .number()
       .positive({ message: "Price must be positive" })
       .optional(),
-    description: z.string().max(400).optional(),
+    description: z.record(LocaleSchema, z.string().max(400)).optional(),
   })
   .refine(
     ({ title, price, description, categoryId }) =>
