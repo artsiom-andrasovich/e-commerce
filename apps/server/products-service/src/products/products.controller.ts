@@ -13,12 +13,14 @@ class ProductsController {
     next: NextFunction,
   ) {
     try {
-      const { limit, cursor, categoryId, search } = req.query;
+      const { limit, cursor, categoryId, search, lang, currency } = req.query;
       const products = await productsService.getProducts(
         categoryId,
         limit,
         cursor,
         search,
+        lang,
+        currency
       );
       return res.status(200).json(products);
     } catch (e) {
@@ -26,13 +28,14 @@ class ProductsController {
     }
   }
   public async getProduct(
-    req: Request<{ productId: string }>,
+    req: Request<{ productId: string }, any, any, { lang?: string, currency?: string }>,
     res: Response,
     next: NextFunction,
   ) {
     try {
       const { productId } = req.params;
-      const product = await productsService.getProduct(productId);
+      const { lang, currency } = req.query;
+      const product = await productsService.getProduct(productId, lang, currency);
       return res.status(200).json(product);
     } catch (e) {
       next(e);

@@ -5,20 +5,16 @@ export default async function Home(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
-  const categoryId =
-    typeof searchParams?.categoryId === "string"
-      ? searchParams.categoryId
-      : null;
   const search =
     typeof searchParams?.search === "string"
       ? searchParams.search
       : null;
-  const initialData = await fetchProducts(categoryId, search, undefined);
+  const initialData = await fetchProducts(null, search, undefined);
 
   return (
     <div className="mx-auto max-w-7xl">
       <SearchBar />
-      <ProductGrid categoryId={categoryId} search={search} initialData={initialData} />
+      <ProductGrid categoryId={null} search={search} initialData={initialData} />
     </div>
   );
 }

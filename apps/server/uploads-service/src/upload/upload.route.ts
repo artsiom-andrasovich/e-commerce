@@ -1,4 +1,4 @@
-import { generateUploadUrlDto } from "@app/lib-shared-types";
+import { generateUploadUrlDto, getBatchAccessUrlsDto } from "@app/lib-shared-types";
 import { Router } from "express";
 import z from "zod";
 import { validateRequest } from "zod-express-middleware";
@@ -10,6 +10,11 @@ router.post(
   "/",
   validateRequest({ body: generateUploadUrlDto }),
   uploadController.generateUploadUrl,
+);
+router.post(
+  "/batch",
+  validateRequest({ body: getBatchAccessUrlsDto }),
+  uploadController.getBatchAccessUrls,
 );
 router.get(
   "/:key",

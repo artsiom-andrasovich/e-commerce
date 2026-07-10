@@ -26,7 +26,7 @@ class UploadService {
   }
 
   public async generateUploadUrl(dto: TGenerateUploadUrl) {
-    const { filename, folder, contentType } = dto;
+    const { filename, entity: folder, contentType } = dto;
     const ext = filename.split(".").pop();
     const finalFileName = `${folder}/${crypto.randomUUID()}.${ext}`;
     const command = new PutObjectCommand({
@@ -52,6 +52,13 @@ class UploadService {
     });
 
     return signedUrl;
+  }
+
+  public async getBatchAccessUrls(keys: string[]) {
+    const entries = await Promise.all(
+      keys.map(async (key) => [key, await this.getAccessUrl(key)]),
+    );
+    return Object.fromEntries(entries);
   }
 
   public async deleteFile(path: string) {

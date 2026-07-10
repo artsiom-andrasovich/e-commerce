@@ -2,7 +2,6 @@
 
 import { PropsWithChildren } from "react";
 import { I18nProvider, I18nProviderProps } from "./I18nProvider";
-import { ReactQueryProvider } from "./ReactQueryProvider";
 
 export function RootProvider({
   children,
@@ -12,7 +11,7 @@ export function RootProvider({
 }: PropsWithChildren<I18nProviderProps>) {
   return (
     <I18nProvider messages={messages} locale={locale} timeZone={timeZone}>
-      <ReactQueryProvider>{children}</ReactQueryProvider>
+      {children}
     </I18nProvider>
   );
 }

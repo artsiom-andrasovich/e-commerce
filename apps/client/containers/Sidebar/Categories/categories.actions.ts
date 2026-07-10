@@ -4,19 +4,23 @@ import {
   GetCategoriesResponseSchema,
   TGetCategoriesResponse,
 } from "@app/lib-shared-types";
+import { env } from "@/configs/env";
+import { getLocale } from "next-intl/server";
 
 export async function fetchCategories(
-  cursor?: string,
+  page?: number,
 ): Promise<TGetCategoriesResponse> {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-  const limit = 10;
+  const API_URL = env.NEXT_PUBLIC_API_URL;
+  const limit = 7;
+  const locale = await getLocale();
 
   try {
     const url = new URL(`${API_URL}/api/categories`);
     url.searchParams.append("limit", limit.toString());
+    url.searchParams.append("lang", locale);
 
-    if (cursor) {
-      url.searchParams.append("cursor", cursor);
+    if (page) {
+      url.searchParams.append("page", page.toString());
     }
 
     const response = await fetch(url.toString(), {
@@ -28,6 +32,6 @@ export async function fetchCategories(
     return GetCategoriesResponseSchema.parse(data);
   } catch (error) {
     console.error("Fetch categories error:", error);
-    return { data: [], nextCursor: null };
+    return { data: [], nextPage: null };
   }
 }

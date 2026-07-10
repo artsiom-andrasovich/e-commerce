@@ -1,4 +1,4 @@
-import { TGenerateUploadUrl } from "@app/lib-shared-types";
+import { TGenerateUploadUrl, TGetBatchAccessUrlsDto } from "@app/lib-shared-types";
 import { NextFunction, Request, Response } from "express";
 import { uploadService } from "./upload.service";
 
@@ -26,6 +26,20 @@ class UploadController {
       const { key } = req.params;
       const signedUrl = await uploadService.getAccessUrl(key);
       return res.status(200).json({ url: signedUrl });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async getBatchAccessUrls(
+    req: Request<any, any, TGetBatchAccessUrlsDto>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const { keys } = req.body;
+      const urls = await uploadService.getBatchAccessUrls(keys);
+      return res.status(200).json(urls);
     } catch (e) {
       next(e);
     }
