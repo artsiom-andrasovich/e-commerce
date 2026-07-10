@@ -9,7 +9,7 @@ export const getProductsQuery = z.object({
     .pipe(z.number().int().min(1).max(100)),
   cursor: zodObjectIdSchema.optional(),
   categoryId: zodObjectIdSchema.optional(),
-  search: z.string().optional(),
+  search: z.string().trim().max(100).optional(),
   lang: z.string().optional(),
   currency: z.string().optional(),
 });

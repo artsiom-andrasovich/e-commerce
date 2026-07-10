@@ -83,14 +83,14 @@ describe("GET /api/products", () => {
   });
 
   it("Have to return products matching the search query in title", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({ name: { en: "Laptops", pl: "Laptopy", de: "Laptops" } });
     await Product.create({
-      title: "MacBook Air",
+      title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
       price: 1000,
       categoryId: category._id,
     });
     await Product.create({
-      title: "Dell XPS",
+      title: { en: "Dell XPS", pl: "Dell XPS", de: "Dell XPS" },
       price: 1200,
       categoryId: category._id,
     });
@@ -103,16 +103,16 @@ describe("GET /api/products", () => {
   });
 
   it("Have to return products matching the search query in description", async () => {
-    const category = await Category.create({ name: "Accessories" });
+    const category = await Category.create({ name: { en: "Accessories", pl: "Akcesoria", de: "Zubehör" } });
     await Product.create({
-      title: "Laptop Sleeve",
-      description: "High quality leather sleeve for 13 inch laptops",
+      title: { en: "Laptop Sleeve", pl: "Etui", de: "Laptoptasche" },
+      description: { en: "High quality leather sleeve for 13 inch laptops", pl: "Wysokiej jakości", de: "Hochwertige" },
       price: 50,
       categoryId: category._id,
     });
     await Product.create({
-      title: "Wireless Mouse",
-      description: "Ergonomic plastic mouse",
+      title: { en: "Wireless Mouse", pl: "Mysz bezprzewodowa", de: "Kabellose Maus" },
+      description: { en: "Ergonomic plastic mouse", pl: "Ergonomiczna", de: "Ergonomische" },
       price: 30,
       categoryId: category._id,
     });
@@ -125,9 +125,9 @@ describe("GET /api/products", () => {
   });
 
   it("Have to return empty array if no products match the search query", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({ name: { en: "Laptops", pl: "Laptopy", de: "Laptops" } });
     await Product.create({
-      title: "MacBook Air",
+      title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
       price: 1000,
       categoryId: category._id,
     });

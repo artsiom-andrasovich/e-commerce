@@ -26,7 +26,7 @@ class ProductsService {
     lang?: string,
     currency?: string,
   ) {
-    const query: { categoryId?: string; _id?: unknown; $text?: unknown } = {};
+    const query: Record<string, unknown> = {};
 
     if (categoryId) {
       query.categoryId = categoryId;
@@ -35,7 +35,11 @@ class ProductsService {
       query._id = { $gt: cursor };
     }
     if (search) {
-      query.$text = { $search: search };
+      const targetLang = lang ?? "en";
+      query.$or = [
+        { [`title.${targetLang}`]: { $regex: search, $options: "i" } },
+        { [`description.${targetLang}`]: { $regex: search, $options: "i" } },
+      ];
     }
 
     const products = await Product.find(query)
@@ -146,7 +150,8 @@ class ProductsService {
     return products.map((product) => ({
       ...product,
       title: product.title?.[targetLang] ?? product.title?.["en"],
-      description: product.description?.[targetLang] ?? product.description?.["en"],
+      description:
+        product.description?.[targetLang] ?? product.description?.["en"],
     }));
   }
 
