@@ -1,4 +1,5 @@
 import {
+  TCreateCategory,
   TGetCategoriesQuery,
   TUpdateCategory,
   getCategoriesQuery,
@@ -25,7 +26,11 @@ class CategoriesController {
     }
   }
 
-  public async createCategory(req: Request, res: Response, next: NextFunction) {
+  public async createCategory(
+    req: Request<any, any, TCreateCategory>,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
       const dto = req.body;
       const newCategory = await categoriesService.createCategory(dto);
@@ -35,22 +40,30 @@ class CategoriesController {
     }
   }
 
-  public async deleteCategory(req: Request, res: Response, next: NextFunction) {
+  public async deleteCategory(
+    req: Request<{ categoryId: string }>,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
-      const { categoryId: id } = req.params;
-      await categoriesService.deleteCategory(id as string);
+      const { categoryId } = req.params;
+      await categoriesService.deleteCategory(categoryId);
       return res.sendStatus(204);
     } catch (e) {
       next(e);
     }
   }
 
-  public async updateCategory(req: Request, res: Response, next: NextFunction) {
+  public async updateCategory(
+    req: Request<{ categoryId: string }, any, TUpdateCategory>,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
-      const { categoryId: id } = req.params;
+      const { categoryId } = req.params;
       const dto: TUpdateCategory = req.body;
       const updatedCategory = await categoriesService.updateCategory(
-        id as string,
+        categoryId,
         dto,
       );
       return res.status(200).json(updatedCategory);

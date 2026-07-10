@@ -6,4 +6,6 @@ export const GetCategoriesResponseSchema = z.object({
   nextPage: z.number().nullable(),
 });
 
-export type TGetCategoriesResponse = z.infer<typeof GetCategoriesResponseSchema>;
+export type TGetCategoriesResponse = z.infer<
+  typeof GetCategoriesResponseSchema
+>;

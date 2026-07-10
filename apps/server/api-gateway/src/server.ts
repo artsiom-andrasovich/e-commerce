@@ -33,6 +33,22 @@ app.use(
   }),
 );
 
+app.use(
+  createProxyMiddleware({
+    pathFilter: "/api/products",
+    target: env.PRODUCTS_SERVICE_URL,
+    changeOrigin: true,
+  }),
+);
+
+app.use(
+  createProxyMiddleware({
+    pathFilter: "/api/upload",
+    target: env.UPLOADS_SERVICE_URL,
+    changeOrigin: true,
+  }),
+);
+
 app.use((req, res) => {
   res.status(404).json({ message: "Gateway: Route not found" });
 });

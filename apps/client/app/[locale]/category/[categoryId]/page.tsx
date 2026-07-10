@@ -1,9 +1,10 @@
-import { Container } from "@/components/Container";
+import { ProductGrid, fetchProducts } from "@/containers/ProductGrid/";
 
-export default function CategoryPage({
-  params,
-}: {
-  params: { categoryId: string };
+export default async function CategoryPage(props: {
+  params: Promise<{ categoryId: string }>;
 }) {
-  return <Container className="flex flex-1 items-stretch"></Container>;
+  const { categoryId } = await props.params;
+  const initialData = await fetchProducts(categoryId, undefined);
+
+  return <ProductGrid categoryId={categoryId} initialData={initialData} />;
 }

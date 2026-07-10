@@ -22,7 +22,9 @@ export function CategoryLink({ category }: CategoryLinkProps) {
           : "text-muted-foreground hover:bg-muted hover:text-foreground",
       )}
     >
-      {category.name}
+      {typeof category.name === "string"
+        ? category.name
+        : category.name?.["en"] || "Unknown"}
     </Link>
   );
 }

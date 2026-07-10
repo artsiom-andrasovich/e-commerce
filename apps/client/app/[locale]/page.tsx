@@ -1,9 +1,7 @@
-import { Container } from '@/components/Container';
+import { ProductGrid, fetchProducts } from "@/containers/ProductGrid/";
 
-export default function Home() {
-  return (
-    <>
-      <Container className="flex flex-1 items-stretch"></Container>
-    </>
-  );
+export default async function Home() {
+  const initialData = await fetchProducts(null, undefined);
+
+  return <ProductGrid categoryId={null} initialData={initialData} />;
 }

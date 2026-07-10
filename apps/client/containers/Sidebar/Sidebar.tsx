@@ -7,7 +7,7 @@ export async function Sidebar() {
   const t = await getTranslations("Sidebar");
   const { data, nextPage } = await fetchCategories();
   return (
-    <aside className="p-4 bg-background border-r border-t rounded-r-md flex flex-col space-y-6">
+    <aside className="w-64 shrink-0 p-4 bg-background border rounded-md flex flex-col space-y-6">
       <NavigationList />
 
       <div className="h-px w-full bg-border" />

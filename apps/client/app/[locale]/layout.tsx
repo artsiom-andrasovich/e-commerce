@@ -1,3 +1,4 @@
+import { Container } from "@/components/Container";
 import { APP_NAME } from "@/constants";
 import { Footer } from "@/containers/Footer";
 import { Header } from "@/containers/Header";
@@ -7,9 +8,9 @@ import { RootProvider } from "@/providers";
 import { hasLocale } from "next-intl";
 import {
   getMessages,
+  getTimeZone,
   getTranslations,
   setRequestLocale,
-  getTimeZone,
 } from "next-intl/server";
 import { DM_Sans, IBM_Plex_Mono, Lora } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -73,10 +74,10 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col ">
         <RootProvider messages={messages} locale={locale} timeZone={timeZone}>
           <Header />
-          <main className="flex-1 items-stretch flex bg-white/30">
+          <Container className="flex-1 items-stretch flex px-2 mt-4 gap-4">
             <Sidebar />
-            {children}
-          </main>
+            <main className="flex-1 pb-8">{children}</main>
+          </Container>
           <Footer />
         </RootProvider>
       </body>
