@@ -1,0 +1,28 @@
+{
+  "Footer": {
+    "copyright": "Poland. Wszelkie prawa zastrzeżone."
+  },
+  "Metadata": {
+    "description": "E-Commerce - platforma zakupowa сzyli szeroki wybór produktów"
+  },
+  "Auth": {
+    "sign-in": "Zaloguj się",
+    "sign-up": "Zarejestruj się"
+  },
+  "UserDropdown": {
+    "cart": "Koszyk"
+  },
+  "Sidebar": {
+    "categories": "Kategorie",
+    "seeMore": "Zobacz więcej"
+  },
+  "ProductCard": {
+    "addToCart": "Dodaj do koszyka"
+  },
+  "ProductGrid": {
+    "noProducts": "Nie znaleziono produktów",
+    "noProductsDesc": "Nie mogliśmy znaleźć żadnych produktów w tej kategorii. Spróbuj wybrać inną kategorię lub wróć później.",
+    "loadingMore": "Ładowanie kolejnych...",
+    "endOfCatalog": "Dotarłeś do końca katalogu."
+  }
+}

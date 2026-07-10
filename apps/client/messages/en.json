@@ -1,0 +1,28 @@
+{
+  "Footer": {
+    "copyright": "Poland. All rights reserved."
+  },
+  "Metadata": {
+    "description": "E-Commerce - platform for buying different products "
+  },
+  "Auth": {
+    "sign-in": "Sign in",
+    "sign-up": "Sign up"
+  },
+  "UserDropdown": {
+    "cart": "Cart"
+  },
+  "Sidebar": {
+    "categories": "Categories",
+    "seeMore": "See more"
+  },
+  "ProductCard": {
+    "addToCart": "Add to Cart"
+  },
+  "ProductGrid": {
+    "noProducts": "No products found",
+    "noProductsDesc": "We couldn't find any products in this category. Try selecting a different category or check back later.",
+    "loadingMore": "Loading more...",
+    "endOfCatalog": "You've reached the end of the catalog."
+  }
+}
