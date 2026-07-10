@@ -11,5 +11,50 @@
   },
   "UserDropdown": {
     "cart": "Cart"
+  },
+  "Forms": {
+    "email": {
+      "label": "Email *",
+      "placeholder": "user@example.com"
+    },
+    "password": {
+      "label": "Password *",
+      "placeholder": "******"
+    },
+    "firstName": {
+      "label": "First Name",
+      "placeholder": "John"
+    },
+    "lastName": {
+      "label": "Last Name",
+      "placeholder": "Doe"
+    },
+    "address": {
+      "country": {
+        "label": "Country",
+        "placeholder": "USA"
+      },
+      "city": {
+        "label": "City",
+        "placeholder": "New York"
+      },
+      "zipCode": {
+        "label": "Zip Code",
+        "placeholder": "10001"
+      },
+      "street": {
+        "label": "Street",
+        "placeholder": "5th Avenue"
+      }
+    },
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "signUp": "Sign Up",
+    "signingUp": "Signing up...",
+    "addressOptional": "Address (Optional)",
+    "dontHaveAccount": "Don't have an account?",
+    "dontHaveAccountLink": "Sign up",
+    "alreadyHaveAccount": "Already have an account?",
+    "alreadyHaveAccountLink": "Sign in"
   }
 }

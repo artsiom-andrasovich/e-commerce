@@ -12,8 +12,8 @@ export const createAddressDto = z.object({
 export const createUserDto = z.object({
   email: zodEmailSchema,
   password: zodPasswordSchema,
-  firstName: z.string().min(1).optional(),
-  lastName: z.string().min(1).optional(),
+  firstName: z.string().min(1).max(30).optional(),
+  lastName: z.string().min(1).max(40).optional(),
   address: createAddressDto.optional(),
 });
 
