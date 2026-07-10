@@ -13,11 +13,12 @@ class ProductsController {
     next: NextFunction,
   ) {
     try {
-      const { limit, cursor, categoryId, lang, currency } = req.query;
+      const { limit, cursor, categoryId, search, lang, currency } = req.query;
       const products = await productsService.getProducts(
         categoryId,
         limit,
         cursor,
+        search,
         lang,
         currency
       );

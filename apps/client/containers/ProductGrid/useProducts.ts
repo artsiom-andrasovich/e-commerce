@@ -4,6 +4,7 @@ import { fetchProducts } from "./products.actions";
 
 export const useProducts = (
   categoryId?: string | null,
+  search?: string | null,
   initialData?: TGetProductsResponse,
 ) => {
   const [products, setProducts] = useState<TProduct[]>(initialData?.data || []);
@@ -24,7 +25,7 @@ export const useProducts = (
 
     setIsFetchingNextPage(true);
     try {
-      const response = await fetchProducts(categoryId, nextCursor);
+      const response = await fetchProducts(categoryId, search, nextCursor);
       setProducts((prev) => [...prev, ...response.data]);
       setNextCursor(response.nextCursor);
     } catch (error) {
@@ -32,7 +33,7 @@ export const useProducts = (
     } finally {
       setIsFetchingNextPage(false);
     }
-  }, [categoryId, nextCursor, isFetchingNextPage]);
+  }, [categoryId, search, nextCursor, isFetchingNextPage]);
 
   return {
     products,

@@ -10,6 +10,7 @@ import { cookies } from "next/headers";
 
 export async function fetchProducts(
   categoryId?: string | null,
+  search?: string | null,
   cursor?: string,
 ): Promise<TGetProductsResponse> {
   const API_URL = env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
@@ -25,7 +26,9 @@ export async function fetchProducts(
     if (categoryId) {
       url.searchParams.append("categoryId", categoryId);
     }
-
+    if (search) {
+      url.searchParams.append("search", search);
+    }
     if (cursor) {
       url.searchParams.append("cursor", cursor);
     }

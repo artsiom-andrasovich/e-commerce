@@ -10,13 +10,18 @@ import { useProducts } from "./useProducts";
 
 type ProductGridProps = {
   categoryId?: string | null;
+  search?: string | null;
   initialData?: TGetProductsResponse;
 };
 
-export const ProductGrid = ({ categoryId, initialData }: ProductGridProps) => {
+export const ProductGrid = ({
+  categoryId,
+  search,
+  initialData,
+}: ProductGridProps) => {
   const t = useTranslations("ProductGrid");
   const { products, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useProducts(categoryId, initialData);
+    useProducts(categoryId, search, initialData);
 
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, {

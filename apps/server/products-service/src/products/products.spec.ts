@@ -81,6 +81,67 @@ describe("GET /api/products", () => {
 
     expect(resPage2.body.nextCursor).toBeNull();
   });
+
+  it("Have to return products matching the search query in title", async () => {
+    const category = await Category.create({ name: { en: "Laptops", pl: "Laptopy", de: "Laptops" } });
+    await Product.create({
+      title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
+      price: 1000,
+      categoryId: category._id,
+    });
+    await Product.create({
+      title: { en: "Dell XPS", pl: "Dell XPS", de: "Dell XPS" },
+      price: 1200,
+      categoryId: category._id,
+    });
+
+    const res = await request(app).get("/api/products?search=MacBook");
+
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].title).toBe("MacBook Air");
+  });
+
+  it("Have to return products matching the search query in description", async () => {
+    const category = await Category.create({ name: { en: "Accessories", pl: "Akcesoria", de: "Zubehör" } });
+    await Product.create({
+      title: { en: "Laptop Sleeve", pl: "Etui", de: "Laptoptasche" },
+      description: { en: "High quality leather sleeve for 13 inch laptops", pl: "Wysokiej jakości", de: "Hochwertige" },
+      price: 50,
+      categoryId: category._id,
+    });
+    await Product.create({
+      title: { en: "Wireless Mouse", pl: "Mysz bezprzewodowa", de: "Kabellose Maus" },
+      description: { en: "Ergonomic plastic mouse", pl: "Ergonomiczna", de: "Ergonomische" },
+      price: 30,
+      categoryId: category._id,
+    });
+
+    const res = await request(app).get("/api/products?search=leather");
+
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].title).toBe("Laptop Sleeve");
+  });
+
+  it("Have to return empty array if no products match the search query", async () => {
+    const category = await Category.create({ name: { en: "Laptops", pl: "Laptopy", de: "Laptops" } });
+    await Product.create({
+      title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
+      price: 1000,
+      categoryId: category._id,
+    });
+
+    const res = await request(app).get("/api/products?search=Samsung");
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        data: [],
+        nextCursor: null,
+      })
+    );
+  });
 });
 
 describe("GET /api/products/:id", () => {
