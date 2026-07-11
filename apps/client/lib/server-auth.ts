@@ -15,3 +15,8 @@ export async function redirectWithLocale(path: string = "/") {
   const locale = await getLocale();
   redirect({ href: path, locale });
 }
+
+export async function hasAuthToken(): Promise<boolean> {
+  const cookieStore = await cookies();
+  return cookieStore.has("accessToken");
+}

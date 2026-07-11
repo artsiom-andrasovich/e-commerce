@@ -79,6 +79,17 @@ class AuthController {
       next(e);
     }
   }
+
+  public async verify(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (!req.user) {
+        throw ApiError.Unauthorized();
+      }
+      return res.status(200).json(req.user);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export const authController = new AuthController();

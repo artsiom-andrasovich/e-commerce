@@ -23,6 +23,7 @@ class AuthService {
       {
         id: user.id,
         email: user.email,
+        role: user.role,
       },
       agent,
     );
@@ -38,6 +39,7 @@ class AuthService {
       {
         id: user.id,
         email: user.email,
+        role: user.role,
       },
       agent,
     );
@@ -69,6 +71,7 @@ class AuthService {
       {
         id: populatedUser.id,
         email: populatedUser.email,
+        role: populatedUser.role,
       },
       agent,
     );

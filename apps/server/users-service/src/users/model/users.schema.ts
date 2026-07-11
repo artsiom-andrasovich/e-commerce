@@ -1,3 +1,4 @@
+import { ROLES, TRole } from "@app/lib-shared-types";
 import mongoose, { Document, Schema, model } from "mongoose";
 
 export interface IUser extends Document {
@@ -5,6 +6,7 @@ export interface IUser extends Document {
   password?: string;
   firstName?: string;
   lastName?: string;
+  role: TRole;
   addresses: mongoose.Types.ObjectId[];
   tokens: mongoose.Types.ObjectId[];
 }
@@ -15,6 +17,7 @@ const UsersSchema = new Schema<IUser>(
     password: { type: String, required: true },
     firstName: { type: String, required: false },
     lastName: { type: String, required: false },
+    role: { type: String, enum: Object.values(ROLES), default: ROLES.USER },
     addresses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
     tokens: [{ type: mongoose.Schema.Types.ObjectId, ref: "Token" }],
   },

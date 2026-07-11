@@ -18,9 +18,10 @@ class TokensService {
   ): Promise<Tokens> {
     logger.info(`Generating tokens for user: ${user.id}`);
 
-    const payload = {
+    const payload: TJwtPayload = {
       id: user.id,
       email: user.email,
+      role: user.role,
     };
 
     const accessToken =

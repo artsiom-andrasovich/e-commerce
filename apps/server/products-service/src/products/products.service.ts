@@ -54,7 +54,6 @@ class ProductsService {
     };
   }
 
-  //TODO: check role for create, update and delete, uncomment within Story 7 on account set up implementation
   public async createProduct(dto: TCreateProduct) {
     const newProduct = await Product.create({ ...dto });
     return newProduct;

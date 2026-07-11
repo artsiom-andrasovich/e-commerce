@@ -5,10 +5,10 @@ import { Link } from "@/i18n";
 import { CirclePercent } from "lucide-react";
 import { AuthButtons } from "./AuthButtons";
 import { UserDropdown } from "./UserDropdown";
+import { hasAuthToken } from "@/lib/server-auth";
 
-export function Header() {
-  //TODO: uncomment within Story 7 on account set up implementation
-  const hasToken = true;
+export async function Header() {
+  const hasToken = await hasAuthToken();
   return (
     <header className="bg-background shadow-md">
       <Container className="py-4 px-2 flex-row flex justify-between">

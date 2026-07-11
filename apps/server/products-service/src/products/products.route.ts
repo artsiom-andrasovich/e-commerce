@@ -3,11 +3,13 @@ import {
   getProductsQuery,
   updateProductDto,
   zodObjectIdSchema,
+  ROLES,
 } from "@app/lib-shared-types";
 import { Router } from "express";
 import { z } from "zod";
 import { validateRequest } from "zod-express-middleware";
 import { productsController } from "./products.controller";
+import { authMiddleware, requireRole } from "@middlewares";
 
 const router = Router();
 
@@ -25,12 +27,16 @@ router.get(
 
 router.post(
   "/",
+  authMiddleware,
+  requireRole([ROLES.ADMIN]),
   validateRequest({ body: createProductDto }),
   productsController.createProduct,
 );
 
 router.patch(
   "/:productId",
+  authMiddleware,
+  requireRole([ROLES.ADMIN]),
   validateRequest({
     params: z.object({ productId: zodObjectIdSchema }),
     body: updateProductDto,
@@ -40,6 +46,8 @@ router.patch(
 
 router.delete(
   "/:productId",
+  authMiddleware,
+  requireRole([ROLES.ADMIN]),
   validateRequest({ params: z.object({ productId: zodObjectIdSchema }) }),
   productsController.deleteProduct,
 );

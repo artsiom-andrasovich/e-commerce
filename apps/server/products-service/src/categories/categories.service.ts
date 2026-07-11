@@ -24,7 +24,6 @@ class CategoriesService {
     };
   }
 
-  //TODO: make creation and deletion of categories only for ADMIN role;
   public async createCategory(dto: TCreateCategory) {
     const category = await Category.findOne({ name: dto.name }).exec();
     if (category) {
