@@ -1,7 +1,15 @@
 import { Category } from "@categories/model";
+import { NextFunction, Request, Response } from "express";
 import request from "supertest";
 import app from "../app";
 import { Product } from "./model";
+
+jest.mock("@middlewares/auth.middleware", () => ({
+  authMiddleware: (req: Request, res: Response, next: NextFunction) => {
+    req.user = { id: "userId", email: "user@example.com", role: "ADMIN" };
+    next();
+  },
+}));
 
 describe("GET /api/products", () => {
   it("Have to send status 200 and return empty array if db is empty", async () => {
@@ -17,14 +25,16 @@ describe("GET /api/products", () => {
   });
 
   it("Have to return array of products, only if they are into DB", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({
+      name: { en: "Laptops", pl: "Laptops", de: "Laptops" },
+    });
     await Product.create({
-      title: "MacBook Air",
+      title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
       price: 1000,
       categoryId: category.id,
     });
     await Product.create({
-      title: "Dell XPS",
+      title: { en: "Dell XPS", pl: "Dell XPS", de: "Dell XPS" },
       price: 1200,
       categoryId: category.id,
     });
@@ -36,19 +46,21 @@ describe("GET /api/products", () => {
   });
 
   it("Have to return correct pages with cursor (limit = 2, total = 3)", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({
+      name: { en: "Laptops", pl: "Laptops", de: "Laptops" },
+    });
     await Product.create({
-      title: "MacBook Air",
+      title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
       price: 1000,
       categoryId: category.id,
     });
     await Product.create({
-      title: "Smartphones",
+      title: { en: "Smartphones", pl: "Smartphones", de: "Smartphones" },
       price: 800,
       categoryId: category.id,
     });
     await Product.create({
-      title: "Tablets",
+      title: { en: "Tablets", pl: "Tablets", de: "Tablets" },
       price: 600,
       categoryId: category.id,
     });
@@ -79,14 +91,16 @@ describe("GET /api/products", () => {
   });
 
   it("Have to return products matching the search query in title", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({
+      name: { en: "Laptops", pl: "Laptopy", de: "Laptops" },
+    });
     await Product.create({
-      title: "MacBook Air",
+      title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
       price: 1000,
       categoryId: category.id,
     });
     await Product.create({
-      title: "Dell XPS",
+      title: { en: "Dell XPS", pl: "Dell XPS", de: "Dell XPS" },
       price: 1200,
       categoryId: category.id,
     });
@@ -99,16 +113,30 @@ describe("GET /api/products", () => {
   });
 
   it("Have to return products matching the search query in description", async () => {
-    const category = await Category.create({ name: "Accessories" });
+    const category = await Category.create({
+      name: { en: "Accessories", pl: "Akcesoria", de: "Zubehör" },
+    });
     await Product.create({
-      title: "Laptop Sleeve",
-      description: "High quality leather sleeve for 13 inch laptops",
+      title: { en: "Laptop Sleeve", pl: "Etui", de: "Laptoptasche" },
+      description: {
+        en: "High quality leather sleeve for 13 inch laptops",
+        pl: "Wysokiej jakości",
+        de: "Hochwertige",
+      },
       price: 50,
       categoryId: category.id,
     });
     await Product.create({
-      title: "Wireless Mouse",
-      description: "Ergonomic plastic mouse",
+      title: {
+        en: "Wireless Mouse",
+        pl: "Mysz bezprzewodowa",
+        de: "Kabellose Maus",
+      },
+      description: {
+        en: "Ergonomic plastic mouse",
+        pl: "Ergonomiczna",
+        de: "Ergonomische",
+      },
       price: 30,
       categoryId: category.id,
     });
@@ -121,9 +149,11 @@ describe("GET /api/products", () => {
   });
 
   it("Have to return empty array if no products match the search query", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({
+      name: { en: "Laptops", pl: "Laptopy", de: "Laptops" },
+    });
     await Product.create({
-      title: "MacBook Air",
+      title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
       price: 1000,
       categoryId: category.id,
     });
@@ -140,9 +170,9 @@ describe("GET /api/products", () => {
   });
 
   it("Have to return imageKey as a single string (first element) in list response", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({ name: { en: "Laptops" } });
     await Product.create({
-      title: "MacBook Air",
+      title: { en: "MacBook Air" },
       price: 1000,
       categoryId: category.id,
       imageKey: ["products/dell.png", "products/dell-1.png"],
@@ -157,9 +187,9 @@ describe("GET /api/products", () => {
   });
 
   it("Have to return null imageKey in list response when imageKey array is empty", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({ name: { en: "Laptops" } });
     await Product.create({
-      title: "Product without image",
+      title: { en: "Product without image" },
       price: 500,
       categoryId: category.id,
       imageKey: [],
@@ -175,9 +205,11 @@ describe("GET /api/products", () => {
 
 describe("GET /api/products/:id", () => {
   it("Have to return product via id in the best scenario", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({
+      name: { en: "Laptops", pl: "Laptops", de: "Laptops" },
+    });
     const product = await Product.create({
-      title: "MacBook Pro",
+      title: { en: "MacBook Pro", pl: "MacBook Pro", de: "MacBook Pro" },
       price: 2000,
       categoryId: category.id,
     });
@@ -201,7 +233,7 @@ describe("GET /api/products/:id", () => {
     expect(res.status).toBe(404);
     expect(res.body).toEqual(
       expect.objectContaining({
-        message: `Product with this id ${fakeId} does not exists`,
+        message: `Product with id ${fakeId} does not exist`,
       }),
     );
   });
@@ -209,19 +241,22 @@ describe("GET /api/products/:id", () => {
 
 describe("POST /api/products", () => {
   it("Have to create a new product if product with this title does not exits", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({
+      name: { en: "Laptops", pl: "Laptops", de: "Laptops" },
+    });
     const newProduct = {
-      title: "MacBook Air",
+      title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
       price: 1000,
       categoryId: category.id,
     };
 
     const res = await request(app).post("/api/products").send(newProduct);
+    if (res.status !== 201) console.log(res.body);
     expect(res.status).toBe(201);
 
     expect(res.body).toEqual(
       expect.objectContaining({
-        title: "MacBook Air",
+        title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
       }),
     );
   });
@@ -229,16 +264,19 @@ describe("POST /api/products", () => {
 
 describe("PATCH /api/products", () => {
   it("Have to change title in the best scenario without conflicts", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({
+      name: { en: "Laptops", pl: "Laptops", de: "Laptops" },
+    });
     await Product.create({
-      title: "MacBook Air",
+      title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
       price: 1000,
       categoryId: category.id,
     });
 
     const productId = (await request(app).get("/api/products")).body.data[0].id;
     const updateProductDto = {
-      title: "Dell XPS",
+      id: productId,
+      title: { en: "Dell XPS", pl: "Dell XPS", de: "Dell XPS" },
     };
 
     const res = await request(app)
@@ -257,16 +295,17 @@ describe("PATCH /api/products", () => {
   it("Have to throw Not Found if no product with this id", async () => {
     const fakeId = "6a1086bc3fbf67a9fb630fb4";
     const updateProductDto = {
-      title: "Dell XPS",
+      id: "6a1086bc3fbf67a9fb630fb4",
+      title: { en: "Dell XPS", pl: "Dell XPS", de: "Dell XPS" },
     };
     const res = await request(app)
-      .patch(`/api/products/${fakeId}`)
+      .patch(`/api/products/${updateProductDto.id}`)
       .send(updateProductDto);
 
     expect(res.status).toBe(404);
     expect(res.body).toEqual(
       expect.objectContaining({
-        message: `Product with this id ${fakeId} does not exists`,
+        message: "Product with id 6a1086bc3fbf67a9fb630fb4 does not exist",
       }),
     );
   });
@@ -274,9 +313,11 @@ describe("PATCH /api/products", () => {
 
 describe("DELETE /api/products", () => {
   it("Have to delete via id in the best scenario", async () => {
-    const category = await Category.create({ name: "Laptops" });
+    const category = await Category.create({
+      name: { en: "Laptops", pl: "Laptops", de: "Laptops" },
+    });
     await Product.create({
-      title: "MacBook Air",
+      title: { en: "MacBook Air", pl: "MacBook Air", de: "MacBook Air" },
       price: 1000,
       categoryId: category.id,
     });
@@ -305,8 +346,7 @@ describe("DELETE /api/products", () => {
     expect(res.status).toBe(404);
     expect(res.body).toEqual(
       expect.objectContaining({
-        message:
-          "Product with this id 6a1086bc3fbf67a9fb630fb4 does not exists",
+        message: "Product with id 6a1086bc3fbf67a9fb630fb4 does not exist",
       }),
     );
   });

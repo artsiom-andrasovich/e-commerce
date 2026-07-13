@@ -26,7 +26,7 @@ class UploadService {
   }
 
   public async generateUploadUrl(dto: TGenerateUploadUrl) {
-    const { filename, folder, contentType } = dto;
+    const { filename, entity: folder, contentType } = dto;
     const ext = filename.split(".").pop();
     const finalFileName = `${folder}/${crypto.randomUUID()}.${ext}`;
     const command = new PutObjectCommand({
@@ -42,18 +42,23 @@ class UploadService {
     return { finalFileName, uploadUrl };
   }
 
-  public async getAccessUrls(keys: string[]) {
-    const promises = keys.map((key) => {
-      const command = new GetObjectCommand({
-        Bucket: env.AWS_S3_BUCKET_NAME,
-        Key: key,
-      });
-      return getSignedUrl(this.s3Client, command, {
-        expiresIn: 3600,
-      });
-    });
 
-    return Promise.all(promises);
+
+  public async getAccessUrl(key: string) {
+    const command = new GetObjectCommand({
+      Bucket: env.AWS_S3_BUCKET_NAME,
+      Key: key,
+    });
+    return getSignedUrl(this.s3Client, command, {
+      expiresIn: 3600,
+    });
+  }
+
+  public async getBatchAccessUrls(keys: string[]) {
+    const entries = await Promise.all(
+      keys.map(async (key) => [key, await this.getAccessUrl(key)]),
+    );
+    return Object.fromEntries(entries);
   }
 
   public async deleteFile(path: string) {

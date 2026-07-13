@@ -3,11 +3,9 @@ import { Schema, model } from "mongoose";
 const CategoriesSchema = new Schema(
   {
     name: {
-      type: String,
+      type: Map,
+      of: String,
       required: true,
-      unique: true,
-      trim: true,
-      maxLength: 30,
     },
   },
   {

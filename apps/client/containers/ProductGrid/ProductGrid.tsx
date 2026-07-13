@@ -2,8 +2,9 @@
 
 import { TGetProductsResponse } from "@app/lib-shared-types";
 import { ShoppingBag } from "lucide-react";
-import { useEffect } from "react";
-import { useInView } from "react-intersection-observer";
+import { useEffect, useRef } from "react";
+import { useInView } from "@/hooks/useInView";
+import { useTranslations } from "next-intl";
 import { ProductCard } from "./ProductCard";
 import { useProducts } from "./useProducts";
 
@@ -18,10 +19,12 @@ export const ProductGrid = ({
   search,
   initialData,
 }: ProductGridProps) => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
+  const t = useTranslations("ProductGrid");
+  const { products, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useProducts(categoryId, search, initialData);
 
-  const { ref, inView } = useInView({
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, {
     rootMargin: "200px",
   });
 
@@ -31,43 +34,17 @@ export const ProductGrid = ({
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const products = data?.pages.flatMap((page) => page.data) || [];
-
-  if (status === "pending") {
-    return (
-      <div className="flex justify-center py-10">
-        <p className="text-gray-500">Loading products...</p>
-      </div>
-    );
-  }
-
-  if (status === "error") {
-    return (
-      <div className="flex min-h-[400px] flex-col items-center justify-center rounded-2xl bg-red-50 p-8 text-center">
-        <h3 className="text-lg font-semibold text-red-800">
-          Something went wrong.
-        </h3>
-        <p className="mt-2 text-sm text-red-600">
-          Failed to load products. Please try again later.
-        </p>
-      </div>
-    );
-  }
-
   if (products.length === 0) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center">
-        <span className="flex flex-col items-center justify-center">
-          <div className="rounded-full bg-gray-100 p-4">
-            <ShoppingBag className="h-8 w-8 text-gray-400" strokeWidth={1.5} />
-          </div>
-          <h3 className="mt-4 text-lg font-semibold text-gray-900">
-            No products found
-          </h3>
-        </span>
+      <div className="flex min-h-[400px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center">
+        <div className="rounded-full bg-gray-100 p-4">
+          <ShoppingBag className="h-8 w-8 text-gray-400" strokeWidth={1.5} />
+        </div>
+        <h3 className="mt-4 text-lg font-semibold text-gray-900">
+          {t("noProducts")}
+        </h3>
         <p className="mt-2 text-sm text-gray-500 max-w-sm">
-          We couldn't find any products in this category. Try selecting a
-          different category or check back later.
+          {t("noProductsDesc")}
         </p>
       </div>
     );
@@ -83,7 +60,7 @@ export const ProductGrid = ({
 
       {isFetchingNextPage && (
         <div className="flex justify-center py-4">
-          <p className="text-gray-500">Loading more...</p>
+          <p className="text-gray-500">{t("loadingMore")}</p>
         </div>
       )}
 
@@ -92,7 +69,7 @@ export const ProductGrid = ({
       {!hasNextPage && products.length > 0 && (
         <div className="text-center pb-4">
           <p className="text-sm text-gray-500">
-            You've reached the end of the catalog.
+            {t("endOfCatalog")}
           </p>
         </div>
       )}

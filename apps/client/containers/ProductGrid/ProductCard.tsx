@@ -1,10 +1,11 @@
 "use client";
 
 import { Button } from "@/components/Button";
-import { useProductSignedUrls } from "@/hooks/useProductSignedUrl";
+
 import { Link } from "@/i18n/navigation";
 import type { TProductListItem } from "@app/lib-shared-types";
 import { ImageOff } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 
 type ProductCardProps = {
@@ -12,8 +13,14 @@ type ProductCardProps = {
 };
 
 export const ProductCard = ({ product }: ProductCardProps) => {
-  const { data: signedUrl } = useProductSignedUrls(product.imageKey);
-  const imageUrl = signedUrl || null;
+  const t = useTranslations("ProductCard");
+  const locale = useLocale();
+  const imageUrl = product.imageUrl || null;
+
+  const formattedPrice = new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: product.currency || "USD",
+  }).format(product.price);
 
   return (
     <Link
@@ -40,7 +47,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           {product.title}
         </h3>
         <span className="text-blue-600 font-semibold mt-1">
-          {product.price}$
+          {formattedPrice}
         </span>
 
         {product.description && (
@@ -52,7 +59,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         )}
 
         <div className="mt-auto pt-4">
-          <Button className="w-full">Add to Cart</Button>
+          <Button className="w-full">{t("addToCart")}</Button>
         </div>
       </div>
     </Link>

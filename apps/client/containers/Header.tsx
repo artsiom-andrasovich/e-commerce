@@ -6,9 +6,13 @@ import { CirclePercent } from "lucide-react";
 import { AuthButtons } from "./AuthButtons";
 import { UserDropdown } from "./UserDropdown";
 import { hasAuthToken } from "@/lib/server-auth";
+import { cookies } from "next/headers";
+import { TCurrencyCode } from "@app/lib-shared-types";
 
 export async function Header() {
   const hasToken = await hasAuthToken();
+  const cookieStore = await cookies();
+  const initialCurrency = (cookieStore.get("currency")?.value || "USD") as TCurrencyCode;
   return (
     <header className="bg-background shadow-md">
       <Container className="py-4 px-2 flex-row flex justify-between">
@@ -19,7 +23,7 @@ export async function Header() {
           <CirclePercent />
           <h1>{APP_NAME}</h1>
         </Link>
-        {hasToken ? <UserDropdown /> : <AuthButtons />}
+        {hasToken ? <UserDropdown initialCurrency={initialCurrency} /> : <AuthButtons />}
       </Container>
     </header>
   );
