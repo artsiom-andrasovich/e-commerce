@@ -5,8 +5,10 @@ import { ShoppingBasket, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { DropdownMenuContent, DropdownMenuTrigger } from "./DropdownMenu";
 import { LocaleSwitcher } from "./LocaleSwitcher";
+import { CurrencySwitcher } from "./CurrencySwitcher";
+import { TCurrencyCode } from "@app/lib-shared-types";
 
-export function UserDropdown() {
+export function UserDropdown({ initialCurrency }: { initialCurrency: TCurrencyCode }) {
   const t = useTranslations("UserDropdown");
   return (
     <Dropdown>
@@ -19,6 +21,7 @@ export function UserDropdown() {
           {t("cart")}
         </Button>
         <LocaleSwitcher className="w-full" />
+        <CurrencySwitcher className="w-full mt-2" initialCurrency={initialCurrency} />
       </DropdownMenuContent>
     </Dropdown>
   );

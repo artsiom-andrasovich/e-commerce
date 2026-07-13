@@ -1,53 +1,48 @@
 "use client";
 
 import { TCategory } from "@app/lib-shared-types";
-import { useEffect } from "react";
-import { useInView } from "react-intersection-observer";
+import { useTranslations } from "next-intl";
 import { CategoryLink } from "./CategoryLink";
 import { useCategories } from "./useCategories";
+import { Loader2 } from "lucide-react";
 
 type CategoryListProps = {
   initialCategories: TCategory[];
-  initialCursor: string | null;
+  initialPage: number | null;
 };
 
 export function CategoryList({
   initialCategories,
-  initialCursor,
+  initialPage,
 }: CategoryListProps) {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useCategories({ data: initialCategories, nextCursor: initialCursor });
+  const { categories, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useCategories({ data: initialCategories, nextPage: initialPage });
 
-  const categories = data.pages.flatMap((page) => page.data) || [];
-
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.5,
-  });
-
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const t = useTranslations("Sidebar");
 
   return (
-    <nav className="flex flex-col overflow-y-auto max-h-96 pr-2">
-      {categories.map((category, idx) => (
-        <div
-          key={category.id}
-          className="flex flex-col mb-2"
-          ref={idx === categories.length - 3 ? ref : null}
-        >
-          <CategoryLink category={category} />
-        </div>
-      ))}
+    <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto pr-2">
+      <nav className="flex flex-col space-y-2">
+        {categories.map((category) => (
+          <div key={category.id} className="flex flex-col">
+            <CategoryLink category={category} />
+          </div>
+        ))}
+      </nav>
 
-      {isFetchingNextPage && (
-        <div className="flex justify-center py-2">
-          <span className="inline-block w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-        </div>
+      {hasNextPage && (
+        <button
+          onClick={fetchNextPage}
+          disabled={isFetchingNextPage}
+          className="text-sm text-primary hover:underline self-start font-medium"
+        >
+          {isFetchingNextPage ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            t("seeMore")
+          )}
+        </button>
       )}
-    </nav>
+    </div>
   );
 }

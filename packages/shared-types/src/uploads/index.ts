@@ -1,3 +1,2 @@
 export * from "./generate-upload-url.dto";
-export * from "./get-signed-urls.dto";
-export * from "./get-signed-urls.response";
+export * from "./get-batch-urls.dto";

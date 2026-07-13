@@ -1,9 +1,9 @@
 import mongoose, { Schema, model } from "mongoose";
 const ProductsSchema = new Schema(
   {
-    title: { type: String, required: true },
+    title: { type: Map, of: String, required: true },
     price: { type: Number, required: true },
-    description: { type: String, required: false },
+    description: { type: Map, of: String, required: false },
     imageKey: { type: [String], default: ["products/default.png"] },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -21,16 +21,8 @@ const ProductsSchema = new Schema(
         return rest;
       },
     },
-  }
+  },
 );
-ProductsSchema.index(
-  { title: "text", description: "text" },
-  {
-    weights: {
-      title: 5,
-      description: 2,
-    },
-  }
-);
+ProductsSchema.index({ title: "text", description: "text" });
 const Product = model("Product", ProductsSchema);
 export { Product };

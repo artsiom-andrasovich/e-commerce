@@ -1,18 +1,21 @@
-import { fetchSignedUrls } from "./actions";
-import { ImageCarousel } from "../ImageCarousel";
 import type { TProduct } from "@app/lib-shared-types";
 import { ImageOff } from "lucide-react";
+import { ImageCarousel } from "../ImageCarousel";
+import { getLocale } from "next-intl/server";
 
 export async function ProductCard({ product }: { product: TProduct }) {
-  const imageUrls =
-    product.imageKey && product.imageKey.length > 0
-      ? await fetchSignedUrls(product.imageKey)
-      : [];
+  const imageUrls = product.imageUrls || [];
 
   const carouselImages = imageUrls.map((url, index) => ({
     id: String(index),
     url,
   }));
+
+  const locale = await getLocale();
+  const formattedPrice = new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: product.currency || "USD",
+  }).format(product.price);
 
   return (
     <div className="flex flex-col gap-4">
@@ -30,7 +33,7 @@ export async function ProductCard({ product }: { product: TProduct }) {
         <h1 className="text-3xl font-bold text-gray-900">{product.title}</h1>
 
         <span className="text-2xl font-semibold text-blue-600">
-          {product.price}$
+          {formattedPrice}
         </span>
 
         {product.description && (

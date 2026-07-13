@@ -2,6 +2,7 @@ import {
   TCreateCategory,
   TGetCategoriesQuery,
   TUpdateCategory,
+  getCategoriesQuery,
 } from "@app/lib-shared-types";
 import { NextFunction, Request, Response } from "express";
 import { categoriesService } from "./categories.service";
@@ -12,9 +13,13 @@ class CategoriesController {
     next: NextFunction,
   ) {
     try {
-      const { limit, cursor } = req.query;
+      const { limit, page, lang } = getCategoriesQuery.parse(req.query);
 
-      const categories = await categoriesService.getCategories(limit, cursor);
+      const categories = await categoriesService.getCategories(
+        limit,
+        page,
+        lang,
+      );
       return res.status(200).json(categories);
     } catch (e) {
       next(e);
