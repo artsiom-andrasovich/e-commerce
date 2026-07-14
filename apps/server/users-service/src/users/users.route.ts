@@ -7,6 +7,8 @@ import { usersController } from "./users.controller";
 
 const router = Router();
 
+router.get("/me", authMiddleware, usersController.getMe);
+
 router.get(
   "/:userId",
   validateRequest({ params: z.object({ userId: zodObjectIdSchema }) }),

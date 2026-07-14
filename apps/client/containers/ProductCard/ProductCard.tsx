@@ -2,6 +2,7 @@ import type { TProduct } from "@app/lib-shared-types";
 import { ImageOff } from "lucide-react";
 import { ImageCarousel } from "../ImageCarousel";
 import { getLocale } from "next-intl/server";
+import { AddToCartButton } from "./AddToCartButton";
 
 export async function ProductCard({ product }: { product: TProduct }) {
   const imageUrls = product.imageUrls || [];
@@ -39,6 +40,9 @@ export async function ProductCard({ product }: { product: TProduct }) {
         {product.description && (
           <p className="text-gray-600">{product.description}</p>
         )}
+        <div className="mt-4">
+          <AddToCartButton productId={product.id!} />
+        </div>
       </div>
     </div>
   );

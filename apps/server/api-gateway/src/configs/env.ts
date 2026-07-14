@@ -15,6 +15,7 @@ const envSchema = z.object({
   CLIENT_URL: z.url().default("http://localhost:5050"),
   UPLOADS_SERVICE_URL: z.url().default("http://localhost:3005"),
   USERS_SERVICE_URL: z.url().default("http://localhost:3003"),
+  ORDERS_SERVICE_URL: z.url().default("http://localhost:3004"),
 });
 
 type Env = z.infer<typeof envSchema>;

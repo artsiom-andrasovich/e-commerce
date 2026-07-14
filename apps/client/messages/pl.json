@@ -12,7 +12,34 @@
   "UserDropdown": {
     "cart": "Koszyk"
   },
+  "Checkout": {
+    "title": "Kasa",
+    "loading": "Ładowanie koszyka...",
+    "empty": "Twój koszyk jest pusty.",
+    "deliveryMethod": "Metoda dostawy",
+    "paymentMethod": "Metoda płatności",
+    "backToHome": "Wróć do sklepu",
+    "deliveryAddress": "Adres dostawy",
+    "orderSummary": "Podsumowanie zamówienia",
+    "product": "Produkt",
+    "qty": "Ilość:",
+    "subtotal": "Suma częściowa",
+    "shipping": "Wysyłka",
+    "calculatedLater": "Obliczane później",
+    "total": "Razem",
+    "processing": "Przetwarzanie...",
+    "placeOrder": "Złóż zamówienie"
+  },
   "Forms": {
+    "deliveryMethod": {
+      "courier": "Kurier (Prosto do drzwi)",
+      "post": "Poczta (Lokalny urząd pocztowy)",
+      "pickup": "Odbiór (Odbiór w sklepie)"
+    },
+    "paymentMethod": {
+      "stripe": "Karta (Kredytowa / Debetowa przez Stripe)",
+      "cash": "Gotówka (Płatność przy odbiorze)"
+    },
     "email": {
       "label": "Email *",
       "placeholder": "jan@kowalski.pl"

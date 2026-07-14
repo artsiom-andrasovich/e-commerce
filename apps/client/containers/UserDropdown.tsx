@@ -4,6 +4,7 @@ import { Dropdown } from "@/components/Dropdown";
 import { ShoppingBasket, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { DropdownMenuContent, DropdownMenuTrigger } from "./DropdownMenu";
+import { Link } from "@/i18n";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { CurrencySwitcher } from "./CurrencySwitcher";
 import { TCurrencyCode } from "@app/lib-shared-types";
@@ -16,7 +17,7 @@ export function UserDropdown({ initialCurrency }: { initialCurrency: TCurrencyCo
         <User className="h-8 w-8" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-background border-2 p-2 right-0 ">
-        <Button variant="ghost" className="flex flex-row gap-2 ">
+        <Button as={Link} href="/checkout" variant="ghost" className="flex w-full justify-start gap-2">
           <ShoppingBasket />
           {t("cart")}
         </Button>
