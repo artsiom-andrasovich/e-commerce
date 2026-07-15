@@ -11,6 +11,7 @@ router.get("/me", authMiddleware, usersController.getMe);
 
 router.get(
   "/:userId",
+  authMiddleware,
   validateRequest({ params: z.object({ userId: zodObjectIdSchema }) }),
   usersController.getUser,
 );

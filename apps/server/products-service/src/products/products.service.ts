@@ -69,7 +69,7 @@ class ProductsService {
     return {
       data: enrichedProducts.map((p: any) => ({
         ...p,
-        imageKey: p.imageKey?.[0] ?? null,
+        imageKey: p.imageKeys?.[0] ?? null,
       })),
       nextCursor,
     };
@@ -82,10 +82,10 @@ class ProductsService {
       ...new Set(
         products
           .flatMap((product) => {
-            const imgKeys = product.imageKey || [];
+            const imgKeys = product.imageKeys || [];
             return onlyFirstImage ? imgKeys[0] : imgKeys;
           })
-          .filter((k) => !!k),
+          .filter(Boolean),
       ),
     ];
 
@@ -112,14 +112,14 @@ class ProductsService {
 
       return products.map((product) => {
         const obj = { ...product };
-        const imgKeys = obj.imageKey || [];
+        const imgKeys: string[] = obj.imageKeys || [];
 
         if (onlyFirstImage) {
           if (urlsMap[imgKeys[0]]) obj.imageUrl = urlsMap[imgKeys[0]];
         } else {
           obj.imageUrls = imgKeys
-            .map((k: string) => urlsMap[k])
-            .filter((k: string) => !!k);
+            .map((key) => urlsMap[key])
+            .filter(Boolean);
         }
 
         return obj;

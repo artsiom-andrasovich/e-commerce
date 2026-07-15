@@ -11,7 +11,7 @@ export async function fetchWithAuth(
   const headers = new Headers(options.headers || {});
 
   if (token && !headers.has("Authorization")) {
-    headers.set("Authorization", token.value);
+    headers.set("Authorization", `Bearer ${token.value}`);
   }
 
   let res = await fetch(url, { ...options, headers });
@@ -50,7 +50,7 @@ export async function fetchWithAuth(
         }
       }
 
-      headers.set("Authorization", data.accessToken);
+      headers.set("Authorization", `Bearer ${data.accessToken}`);
       res = await fetch(url, { ...options, headers });
     }
   }

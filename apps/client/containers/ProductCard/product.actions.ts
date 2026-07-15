@@ -5,11 +5,13 @@ import { TProduct, productSchema } from "@app/lib-shared-types";
 import { getLocale } from "next-intl/server";
 import { cookies } from "next/headers";
 
+import { DEFAULT_CURRENCY } from "@/constants";
+
 export async function fetchProductById(productId: string): Promise<TProduct> {
   const API_URL = env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
   const locale = await getLocale();
   const currencyCookie = (await cookies()).get("currency");
-  const currency = currencyCookie?.value || "USD";
+  const currency = currencyCookie?.value || DEFAULT_CURRENCY;
 
   try {
     const url = new URL(`${API_URL}/api/products/${productId}`);

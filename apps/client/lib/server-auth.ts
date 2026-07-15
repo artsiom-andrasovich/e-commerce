@@ -4,17 +4,22 @@ import { redirect } from "@/i18n";
 import { getLocale } from "next-intl/server";
 import { cookies } from "next/headers";
 
+import { isProduction } from "@/configs";
+
 export async function setAuthCookies(accessToken: string, refreshToken?: string) {
   const cookieStore = await cookies();
   cookieStore.set("accessToken", accessToken, {
     httpOnly: true,
     path: "/",
+    secure: isProduction,
+    sameSite: "lax",
   });
 
   if (refreshToken) {
     cookieStore.set("refreshToken", refreshToken, {
       httpOnly: true,
       path: "/",
+      secure: isProduction,
       sameSite: "lax",
     });
   }

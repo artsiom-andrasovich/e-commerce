@@ -1,6 +1,8 @@
 import request from "supertest";
+import jwt from "jsonwebtoken";
 import app from "../app";
 import { User } from "./model";
+import { env } from "../configs/env";
 
 describe("GET /api/users/:userId", () => {
   it("Have to return user via id in the best scenario", async () => {
@@ -11,7 +13,14 @@ describe("GET /api/users/:userId", () => {
       lastName: "Doe",
     });
 
-    const res = await request(app).get(`/api/users/${user.id}`);
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: "USER" },
+      env.JWT_ACCESS_SECRET,
+    );
+
+    const res = await request(app)
+      .get(`/api/users/${user.id}`)
+      .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(
@@ -30,16 +39,29 @@ describe("GET /api/users/:userId", () => {
       password: "password123",
     });
 
-    const res = await request(app).get(`/api/users/${user.id}`);
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: "USER" },
+      env.JWT_ACCESS_SECRET,
+    );
+
+    const res = await request(app)
+      .get(`/api/users/${user.id}`)
+      .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.password).toBeUndefined();
   });
 
-  it("Have to throw Not Found if no user with this id", async () => {
+  it("Have to throw Not Found if no user with this id (called by admin)", async () => {
     const fakeId = "6a1086bc3fbf67a9fb630fb4";
+    const token = jwt.sign(
+      { id: "adminId", email: "admin@example.com", role: "ADMIN" },
+      env.JWT_ACCESS_SECRET,
+    );
 
-    const res = await request(app).get(`/api/users/${fakeId}`);
+    const res = await request(app)
+      .get(`/api/users/${fakeId}`)
+      .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(404);
     expect(res.body).toEqual(
@@ -49,8 +71,53 @@ describe("GET /api/users/:userId", () => {
     );
   });
 
+  it("Have to throw 403 Forbidden if non-admin fetches another user profile", async () => {
+    const user = await User.create({
+      email: "user1@example.com",
+      password: "password123",
+    });
+
+    const token = jwt.sign(
+      { id: "otherUserId", email: "other@example.com", role: "USER" },
+      env.JWT_ACCESS_SECRET,
+    );
+
+    const res = await request(app)
+      .get(`/api/users/${user.id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.status).toBe(403);
+  });
+
+  it("Have to succeed if admin fetches another user profile", async () => {
+    const user = await User.create({
+      email: "user2@example.com",
+      password: "password123",
+      firstName: "UserTwo",
+    });
+
+    const token = jwt.sign(
+      { id: "adminId", email: "admin@example.com", role: "ADMIN" },
+      env.JWT_ACCESS_SECRET,
+    );
+
+    const res = await request(app)
+      .get(`/api/users/${user.id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.firstName).toBe("UserTwo");
+  });
+
   it("Have to throw 400 if userId is not a valid ObjectId", async () => {
-    const res = await request(app).get("/api/users/something");
+    const token = jwt.sign(
+      { id: "userId", email: "user@example.com", role: "USER" },
+      env.JWT_ACCESS_SECRET,
+    );
+
+    const res = await request(app)
+      .get("/api/users/something")
+      .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(400);
   });
@@ -64,10 +131,8 @@ describe("PATCH /api/users/:userId", () => {
       firstName: "John",
     });
 
-    const jwt = require("jsonwebtoken");
-    const { env } = require("../configs/env");
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, role: "USER" },
       env.JWT_ACCESS_SECRET,
     );
 
@@ -90,10 +155,8 @@ describe("PATCH /api/users/:userId", () => {
       password: "123",
     });
 
-    const jwt = require("jsonwebtoken");
-    const { env } = require("../configs/env");
     const token = jwt.sign(
-      { id: "6a1086bc3fbf67a9fb630fb4", email: "hacker@example.com" },
+      { id: "6a1086bc3fbf67a9fb630fb4", email: "hacker@example.com", role: "USER" },
       env.JWT_ACCESS_SECRET,
     );
 
@@ -106,6 +169,29 @@ describe("PATCH /api/users/:userId", () => {
 
     expect(res.status).toBe(403);
   });
+
+  it("Have to succeed if admin updates another user profile", async () => {
+    const user = await User.create({
+      email: "user@example.com",
+      password: "123",
+      firstName: "BeforeAdmin",
+    });
+
+    const token = jwt.sign(
+      { id: "adminId", email: "admin@example.com", role: "ADMIN" },
+      env.JWT_ACCESS_SECRET,
+    );
+
+    const res = await request(app)
+      .patch(`/api/users/${user.id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        firstName: "AfterAdmin",
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body.firstName).toBe("AfterAdmin");
+  });
 });
 
 describe("DELETE /api/users/:userId", () => {
@@ -115,10 +201,47 @@ describe("DELETE /api/users/:userId", () => {
       password: "password123",
     });
 
-    const jwt = require("jsonwebtoken");
-    const { env } = require("../configs/env");
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, role: "USER" },
+      env.JWT_ACCESS_SECRET,
+    );
+
+    const res = await request(app)
+      .delete(`/api/users/${user.id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.status).toBe(204);
+
+    const checkUser = await User.findById(user.id);
+    expect(checkUser).toBeNull();
+  });
+
+  it("Have to throw 403 Forbidden if non-admin deletes another user account", async () => {
+    const user = await User.create({
+      email: "user@example.com",
+      password: "password123",
+    });
+
+    const token = jwt.sign(
+      { id: "otherUserId", email: "other@example.com", role: "USER" },
+      env.JWT_ACCESS_SECRET,
+    );
+
+    const res = await request(app)
+      .delete(`/api/users/${user.id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.status).toBe(403);
+  });
+
+  it("Have to succeed if admin deletes another user account", async () => {
+    const user = await User.create({
+      email: "user@example.com",
+      password: "password123",
+    });
+
+    const token = jwt.sign(
+      { id: "adminId", email: "admin@example.com", role: "ADMIN" },
       env.JWT_ACCESS_SECRET,
     );
 

@@ -3,6 +3,7 @@ import { z } from "zod";
 const envSchema = z.object({
   NEXT_PUBLIC_API_URL: z.url(),
   NEXT_PUBLIC_UPLOADS_URL: z.url(),
+  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
 });
 
 type Env = z.infer<typeof envSchema>;
@@ -15,3 +16,4 @@ if (!parsed.success) {
 }
 
 export const env: Env = parsed.data;
+export const isProduction = parsed.data.NODE_ENV === "production";

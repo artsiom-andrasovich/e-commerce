@@ -15,14 +15,15 @@ class UsersService {
     const existingUser = await User.findOne({ email: userData.email }).exec();
     if (existingUser) {
       throw ApiError.Conflict(
-        `User with email ${userData.email} already exists`,
+        "User already exists",
       );
     }
 
     const { password, address, ...rest } = userData;
+    const hashedPassword = await hashPassword(password);
     const user = await User.create({
       ...rest,
-      password: hashPassword(password),
+      password: hashedPassword,
     });
 
     if (address) {

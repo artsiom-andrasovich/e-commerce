@@ -20,6 +20,10 @@ class UsersController {
   ) {
     try {
       const { userId } = req.params;
+      if (req.user?.role !== "ADMIN" && req.user?.id !== userId) {
+        throw ApiError.Forbidden();
+      }
+
       const user = await usersService.findById(userId);
       return res.status(200).json(user);
     } catch (e) {
@@ -34,7 +38,7 @@ class UsersController {
   ) {
     try {
       const { userId } = req.params;
-      if (req.user?.id !== userId) {
+      if (req.user?.role !== "ADMIN" && req.user?.id !== userId) {
         throw ApiError.Forbidden();
       }
       
@@ -53,7 +57,7 @@ class UsersController {
   ) {
     try {
       const { userId } = req.params;
-      if (req.user?.id !== userId) {
+      if (req.user?.role !== "ADMIN" && req.user?.id !== userId) {
         throw ApiError.Forbidden();
       }
 

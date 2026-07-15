@@ -4,6 +4,8 @@ import { ImageCarousel } from "../ImageCarousel";
 import { getLocale } from "next-intl/server";
 import { AddToCartButton } from "./AddToCartButton";
 
+import { DEFAULT_CURRENCY } from "@/constants";
+
 export async function ProductCard({ product }: { product: TProduct }) {
   const imageUrls = product.imageUrls || [];
 
@@ -15,7 +17,7 @@ export async function ProductCard({ product }: { product: TProduct }) {
   const locale = await getLocale();
   const formattedPrice = new Intl.NumberFormat(locale, {
     style: "currency",
-    currency: product.currency || "USD",
+    currency: product.currency || DEFAULT_CURRENCY,
   }).format(product.price);
 
   return (

@@ -1,5 +1,5 @@
-import { hashSync } from "bcrypt";
+import { hash } from "bcrypt";
 
-export function hashPassword(password: string) {
-	return hashSync(password, 15);
+export async function hashPassword(password: string) {
+  return hash(password, 15);
 }
