@@ -35,7 +35,9 @@
       "@middlewares": ["src/middlewares/"],
       "@middlewares/*": ["src/middlewares/*"],
       "@configs": ["src/configs/"],
-      "@configs/*": ["src/configs/*"]
+      "@configs/*": ["src/configs/*"],
+      "@mail": ["src/mail/"],
+      "@mail/*": ["src/mail/*"]
     }
   }
 }

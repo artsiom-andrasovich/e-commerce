@@ -49,6 +49,8 @@ const orderSchema = new Schema<TOrder>(
   {
     timestamps: true,
     toJSON: {
+      virtuals: true,
+      versionKey: false,
       transform: function (doc, ret) {
         const { _id, ...rest } = ret;
         return rest;

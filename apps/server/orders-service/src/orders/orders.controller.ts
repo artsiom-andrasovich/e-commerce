@@ -15,7 +15,12 @@ export class OrdersController {
     try {
       const dto = req.body;
       const { lang, currency } = req.query;
-      const result = await ordersService.createOrder(req.user!, dto, lang, currency);
+      const result = await ordersService.createOrder(
+        req.user!,
+        dto,
+        lang,
+        currency,
+      );
       return res.status(201).json(result);
     } catch (e) {
       next(e);
@@ -31,6 +36,19 @@ export class OrdersController {
       const { page, limit } = getOrdersQuery.parse(req.query);
       const orders = await ordersService.getMyOrders(req.user!, page, limit);
       return res.status(200).json(orders);
+    } catch (e) {
+      next(e);
+    }
+  }
+  public async getOrderById(
+    req: Request<{ orderId: string }>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const { orderId } = req.params;
+      const order = await ordersService.getOrderById(req.user!, orderId);
+      return res.status(200).json(order);
     } catch (e) {
       next(e);
     }

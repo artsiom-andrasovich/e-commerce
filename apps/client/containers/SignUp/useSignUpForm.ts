@@ -20,7 +20,7 @@ const signUpFormSchema = createUserDto.extend({
     .optional(),
 });
 
-export type SignUpInput = z.infer<typeof signUpFormSchema>;
+export type SignUpInput = z.input<typeof signUpFormSchema>;
 
 export function useSignUpForm() {
   const form = useForm<SignUpInput>({
