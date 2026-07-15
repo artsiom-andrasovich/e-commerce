@@ -1,5 +1,5 @@
 import { Container } from "@/components/Container";
-import { APP_NAME } from "@/constants";
+import { APP_NAME, DEFAULT_CURRENCY } from "@/constants";
 import { AppPaths } from "@/constants/app-paths";
 import { Link } from "@/i18n";
 import { CirclePercent } from "lucide-react";
@@ -12,7 +12,8 @@ import { TCurrencyCode } from "@app/lib-shared-types";
 export async function Header() {
   const hasToken = await hasAuthToken();
   const cookieStore = await cookies();
-  const initialCurrency = (cookieStore.get("currency")?.value || "USD") as TCurrencyCode;
+  const initialCurrency = (cookieStore.get("currency")?.value || DEFAULT_CURRENCY) as TCurrencyCode;
+
   return (
     <header className="bg-background shadow-md">
       <Container className="py-4 px-2 flex-row flex justify-between">

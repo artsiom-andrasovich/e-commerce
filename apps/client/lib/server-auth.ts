@@ -4,10 +4,14 @@ import { redirect } from "@/i18n";
 import { getLocale } from "next-intl/server";
 import { cookies } from "next/headers";
 
+import { isProduction } from "@/configs";
+
 export async function setAuthCookies(accessToken: string) {
   (await cookies()).set("accessToken", accessToken, {
     httpOnly: true,
     path: "/",
+    secure: isProduction,
+    sameSite: "lax",
   });
 }
 

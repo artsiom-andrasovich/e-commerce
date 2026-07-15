@@ -54,7 +54,8 @@ class AuthService {
     if (!refreshToken) {
       throw ApiError.Unauthorized("No refresh token provided");
     }
-    const tokenDoc = await Token.findOne({ token: refreshToken })
+    const hashedToken = tokensService.hashToken(refreshToken);
+    const tokenDoc = await Token.findOne({ token: hashedToken })
       .populate("user")
       .exec();
     if (!tokenDoc) {
@@ -62,7 +63,7 @@ class AuthService {
     }
 
     if (!tokenDoc.exp || new Date() > new Date(tokenDoc.exp as any)) {
-      await Token.deleteOne({ token: refreshToken });
+      await Token.deleteOne({ token: hashedToken });
       throw ApiError.Unauthorized("Refresh token expired");
     }
 

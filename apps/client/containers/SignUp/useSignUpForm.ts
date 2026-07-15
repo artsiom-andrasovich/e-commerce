@@ -1,21 +1,22 @@
-import { zodPasswordSchema } from "@app/lib-shared-types";
+import {
+  createAddressDto,
+  createUserDto,
+} from "@app/lib-shared-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signUpAction } from "./sign-up.actions";
 
-const signUpFormSchema = z.object({
-  email: z.email(),
-  password: zodPasswordSchema,
-  firstName: z.string().min(1).max(30).optional(),
-  lastName: z.string().min(1).max(40).optional(),
-  address: z
-    .object({
-      country: z.string().optional(),
-      city: z.string().optional(),
-      street: z.string().optional(),
-      zipCode: z.string().optional(),
-    })
+const signUpFormSchema = createUserDto.extend({
+  address: createAddressDto
+    .or(
+      z.object({
+        country: z.literal(""),
+        city: z.literal(""),
+        street: z.literal(""),
+        zipCode: z.literal(""),
+      })
+    )
     .optional(),
 });
 
@@ -39,23 +40,17 @@ export function useSignUpForm() {
   });
 
   const onSubmit = async (data: SignUpInput) => {
-    const hasAddress =
-      data.address?.country ||
-      data.address?.city ||
-      data.address?.zipCode ||
-      data.address?.street;
-
     const payload = {
       email: data.email,
       password: data.password,
       firstName: data.firstName || undefined,
       lastName: data.lastName || undefined,
-      address: hasAddress
+      address: data.address && data.address.country
         ? {
-            country: data.address!.country || "",
-            city: data.address!.city || "",
-            street: data.address!.street || "",
-            zipCode: data.address!.zipCode || "",
+            country: data.address.country,
+            city: data.address.city,
+            street: data.address.street,
+            zipCode: data.address.zipCode,
             isDefault: true,
           }
         : undefined,

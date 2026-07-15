@@ -12,6 +12,10 @@ export interface Tokens {
 }
 
 class TokensService {
+  public hashToken(token: string): string {
+    return crypto.createHash("sha256").update(token).digest("hex");
+  }
+
   public async generateTokens(
     user: TJwtPayload,
     agent: string,
@@ -24,18 +28,18 @@ class TokensService {
       role: user.role,
     };
 
-    const accessToken =
-      "Bearer " +
-      jwt.sign(payload, env.JWT_ACCESS_SECRET, {
-        expiresIn: "15m",
-      });
+    const accessToken = jwt.sign(payload, env.JWT_ACCESS_SECRET, {
+      expiresIn: "15m",
+    });
 
-    const refreshToken = await this.upsertRefreshToken(user.id, agent);
+    const rawToken = crypto.randomUUID();
+    const refreshToken = await this.upsertRefreshToken(user.id, agent, rawToken);
     return { accessToken, refreshToken };
   }
 
   public async deleteRefreshToken(token: string) {
-    return Token.deleteMany({ token });
+    const hashedToken = this.hashToken(token);
+    return Token.deleteMany({ token: hashedToken });
   }
 
   public async deleteAllUserTokens(userId: string): Promise<void> {
@@ -58,31 +62,36 @@ class TokensService {
   private async upsertRefreshToken(
     userId: string,
     agent: string,
+    rawToken: string,
   ): Promise<TokenType> {
     const existingToken = await Token.findOne({
       user: userId,
       userAgent: agent,
     });
 
-    const tokenString = crypto.randomUUID();
     const exp = new Date();
     exp.setDate(exp.getDate() + 30);
+    const hashedToken = this.hashToken(rawToken);
 
     if (existingToken) {
-      existingToken.token = tokenString;
+      existingToken.token = hashedToken;
       existingToken.exp = exp;
       await existingToken.save();
-      return existingToken.toJSON() as TokenType;
+      const result = existingToken.toJSON() as TokenType;
+      result.token = rawToken;
+      return result;
     }
 
     const newToken = await Token.create({
-      token: tokenString,
+      token: hashedToken,
       exp,
       user: userId,
       userAgent: agent,
     });
 
-    return newToken.toJSON() as TokenType;
+    const result = newToken.toJSON() as TokenType;
+    result.token = rawToken;
+    return result;
   }
 }
 

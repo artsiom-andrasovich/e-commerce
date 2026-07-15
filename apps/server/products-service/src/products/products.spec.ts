@@ -175,7 +175,7 @@ describe("GET /api/products", () => {
       title: { en: "MacBook Air" },
       price: 1000,
       categoryId: category.id,
-      imageKey: ["products/dell.png", "products/dell-1.png"],
+      imageKeys: ["products/dell.png", "products/dell-1.png"],
     });
 
     const res = await request(app).get("/api/products");
@@ -192,7 +192,7 @@ describe("GET /api/products", () => {
       title: { en: "Product without image" },
       price: 500,
       categoryId: category.id,
-      imageKey: [],
+      imageKeys: [],
     });
 
     const res = await request(app).get("/api/products");

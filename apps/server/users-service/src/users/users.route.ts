@@ -9,6 +9,7 @@ const router = Router();
 
 router.get(
   "/:userId",
+  authMiddleware,
   validateRequest({ params: z.object({ userId: zodObjectIdSchema }) }),
   usersController.getUser,
 );

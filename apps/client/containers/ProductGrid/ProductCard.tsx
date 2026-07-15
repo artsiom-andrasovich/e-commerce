@@ -8,6 +8,8 @@ import { ImageOff } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 
+import { DEFAULT_CURRENCY } from "@/constants";
+
 type ProductCardProps = {
   product: TProductListItem;
 };
@@ -19,7 +21,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const formattedPrice = new Intl.NumberFormat(locale, {
     style: "currency",
-    currency: product.currency || "USD",
+    currency: product.currency || DEFAULT_CURRENCY,
   }).format(product.price);
 
   return (
@@ -30,7 +32,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <div className="w-full h-56 shrink-0 bg-gray-100 flex items-center justify-center p-4">
         {imageUrl ? (
           <Image
-            src={imageUrl as string}
+            src={imageUrl}
             alt={product.title}
             width={200}
             height={200}
