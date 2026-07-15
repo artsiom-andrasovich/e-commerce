@@ -2,6 +2,7 @@ import type { TProduct } from "@app/lib-shared-types";
 import { ImageOff } from "lucide-react";
 import { ImageCarousel } from "../ImageCarousel";
 import { getLocale } from "next-intl/server";
+import { AddToCartButton } from "./AddToCartButton";
 
 import { DEFAULT_CURRENCY } from "@/constants";
 
@@ -41,6 +42,9 @@ export async function ProductCard({ product }: { product: TProduct }) {
         {product.description && (
           <p className="text-gray-600">{product.description}</p>
         )}
+        <div className="mt-4">
+          <AddToCartButton productId={product.id!} />
+        </div>
       </div>
     </div>
   );

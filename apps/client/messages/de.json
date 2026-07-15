@@ -12,7 +12,34 @@
   "UserDropdown": {
     "cart": "Warenkorb"
   },
+  "Checkout": {
+    "title": "Kasse",
+    "loading": "Warenkorb wird geladen...",
+    "empty": "Ihr Warenkorb ist leer.",
+    "deliveryMethod": "Liefermethode",
+    "paymentMethod": "Zahlungsmethode",
+    "backToHome": "Zurück zum Shop",
+    "deliveryAddress": "Lieferadresse",
+    "orderSummary": "Bestellübersicht",
+    "product": "Produkt",
+    "qty": "Menge:",
+    "subtotal": "Zwischensumme",
+    "shipping": "Versand",
+    "calculatedLater": "Wird später berechnet",
+    "total": "Gesamtsumme",
+    "processing": "Wird verarbeitet...",
+    "placeOrder": "Bestellung aufgeben"
+  },
   "Forms": {
+    "deliveryMethod": {
+      "courier": "Kurier (Direkt zur Tür)",
+      "post": "Post (Lokale Postfiliale)",
+      "pickup": "Abholung (Abholung im Geschäft)"
+    },
+    "paymentMethod": {
+      "stripe": "Karte (Kredit / Debit via Stripe)",
+      "cash": "Bargeld (Zahlung bei Lieferung)"
+    },
     "email": {
       "label": "E-Mail *",
       "placeholder": "max@mustermann.de"

@@ -4,6 +4,15 @@ import { NextFunction, Request, Response } from "express";
 import { usersService } from "./users.service";
 
 class UsersController {
+  public async getMe(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await usersService.findById(req.user!.id);
+      return res.status(200).json(user);
+    } catch (e) {
+      next(e);
+    }
+  }
+
   public async getUser(
     req: Request<{ userId: string }>,
     res: Response,

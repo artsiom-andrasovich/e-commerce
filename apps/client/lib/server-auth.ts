@@ -6,13 +6,23 @@ import { cookies } from "next/headers";
 
 import { isProduction } from "@/configs";
 
-export async function setAuthCookies(accessToken: string) {
-  (await cookies()).set("accessToken", accessToken, {
+export async function setAuthCookies(accessToken: string, refreshToken?: string) {
+  const cookieStore = await cookies();
+  cookieStore.set("accessToken", accessToken, {
     httpOnly: true,
     path: "/",
     secure: isProduction,
     sameSite: "lax",
   });
+
+  if (refreshToken) {
+    cookieStore.set("refreshToken", refreshToken, {
+      httpOnly: true,
+      path: "/",
+      secure: isProduction,
+      sameSite: "lax",
+    });
+  }
 }
 
 export async function redirectWithLocale(path: string = "/") {

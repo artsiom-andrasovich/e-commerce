@@ -12,7 +12,34 @@
   "UserDropdown": {
     "cart": "Cart"
   },
+  "Checkout": {
+    "title": "Checkout",
+    "loading": "Loading cart...",
+    "empty": "Your cart is empty.",
+    "deliveryMethod": "Delivery Method",
+    "paymentMethod": "Payment Method",
+    "backToHome": "Back to store",
+    "deliveryAddress": "Delivery Address",
+    "orderSummary": "Order Summary",
+    "product": "Product",
+    "qty": "Qty:",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "calculatedLater": "Calculated later",
+    "total": "Total",
+    "processing": "Processing...",
+    "placeOrder": "Place Order"
+  },
   "Forms": {
+    "deliveryMethod": {
+      "courier": "Courier (Direct to door)",
+      "post": "Post (Local post office)",
+      "pickup": "Pickup (In-store pickup)"
+    },
+    "paymentMethod": {
+      "stripe": "Card (Credit / Debit via Stripe)",
+      "cash": "Cash (Pay on delivery)"
+    },
     "email": {
       "label": "Email *",
       "placeholder": "user@example.com"

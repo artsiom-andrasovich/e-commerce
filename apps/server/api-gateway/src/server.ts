@@ -65,6 +65,22 @@ app.use(
   }),
 );
 
+app.use(
+  createProxyMiddleware({
+    pathFilter: "/api/orders",
+    target: env.ORDERS_SERVICE_URL,
+    changeOrigin: true,
+  }),
+);
+
+app.use(
+  createProxyMiddleware({
+    pathFilter: "/api/cart",
+    target: env.ORDERS_SERVICE_URL,
+    changeOrigin: true,
+  }),
+);
+
 app.use((req, res) => {
   res.status(404).json({ message: "Gateway: Route not found" });
 });

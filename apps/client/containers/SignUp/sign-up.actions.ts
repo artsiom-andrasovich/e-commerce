@@ -34,8 +34,11 @@ export async function signUpAction(data: SignUpInput) {
 
     const result = await res.json();
 
+const setCookieHeader = res.headers.get("set-cookie");
+const refreshToken = setCookieHeader?.match(/refreshToken=([^;]+)/)?.[1];
+
     if (result.accessToken) {
-      await setAuthCookies(result.accessToken);
+      await setAuthCookies(result.accessToken, refreshToken);
     }
   } catch (error) {
     console.error(error);
