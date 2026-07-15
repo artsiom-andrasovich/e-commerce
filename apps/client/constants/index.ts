@@ -1,4 +1,6 @@
 export const APP_NAME = 'e-commerce' as const;
+export const DEFAULT_CURRENCY = 'USD' as const;
+
 
 export const LOCALES = [
   { code: 'en', label: 'English' },

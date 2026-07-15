@@ -10,6 +10,8 @@ type ImageCarouselProps = {
   setCurrentImageIndex: Dispatch<SetStateAction<number>>;
 };
 
+const itemWidth = 100;
+
 export function BottomImageCarousel({
   images,
   currentImageIndex,
@@ -19,8 +21,8 @@ export function BottomImageCarousel({
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    const visibleItems = Math.floor(container.clientWidth / 100);
-    const scrollAmount = (currentImageIndex - (visibleItems - 1) / 2) * 100;
+    const visibleItems = Math.floor(container.clientWidth / itemWidth);
+    const scrollAmount = (currentImageIndex - (visibleItems - 1) / 2) * itemWidth;
     container.scrollTo({
       left: scrollAmount,
       behavior: "smooth",
@@ -45,7 +47,7 @@ export function BottomImageCarousel({
           height={80}
           unoptimized
           quality={10}
-          onClick={() => setCurrentImageIndex((prev) => (prev = index))}
+          onClick={() => setCurrentImageIndex(index)}
         />
       ))}
     </div>
