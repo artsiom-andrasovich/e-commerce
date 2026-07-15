@@ -1,6 +1,14 @@
+import { NextFunction, Request, Response } from "express";
 import request from "supertest";
 import app from "../app";
 import { Category } from "./model";
+
+jest.mock("@middlewares/auth.middleware", () => ({
+  authMiddleware: (req: Request, res: Response, next: NextFunction) => {
+    req.user = { id: "userId", email: "user@example.com", role: "ADMIN" };
+    next();
+  },
+}));
 
 describe("GET /api/categories", () => {
   it("Have to send status 200 and return empty array if db is empty", async () => {

@@ -43,6 +43,22 @@ app.use(
 
 app.use(
   createProxyMiddleware({
+    pathFilter: "/api/users",
+    target: env.USERS_SERVICE_URL,
+    changeOrigin: true,
+  }),
+);
+
+app.use(
+  createProxyMiddleware({
+    pathFilter: "/api/auth",
+    target: env.USERS_SERVICE_URL,
+    changeOrigin: true,
+  }),
+);
+
+app.use(
+  createProxyMiddleware({
     pathFilter: "/api/upload",
     target: env.UPLOADS_SERVICE_URL,
     changeOrigin: true,

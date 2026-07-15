@@ -5,12 +5,12 @@ import { Link } from "@/i18n";
 import { CirclePercent } from "lucide-react";
 import { AuthButtons } from "./AuthButtons";
 import { UserDropdown } from "./UserDropdown";
+import { hasAuthToken } from "@/lib/server-auth";
 import { cookies } from "next/headers";
 import { TCurrencyCode } from "@app/lib-shared-types";
 
 export async function Header() {
-  //TODO: uncomment within Story 7 on account set up implementation
-  const hasToken = true;
+  const hasToken = await hasAuthToken();
   const cookieStore = await cookies();
   const initialCurrency = (cookieStore.get("currency")?.value || DEFAULT_CURRENCY) as TCurrencyCode;
 

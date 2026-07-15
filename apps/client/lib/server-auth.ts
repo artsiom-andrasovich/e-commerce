@@ -1,0 +1,26 @@
+"use server";
+
+import { redirect } from "@/i18n";
+import { getLocale } from "next-intl/server";
+import { cookies } from "next/headers";
+
+import { isProduction } from "@/configs";
+
+export async function setAuthCookies(accessToken: string) {
+  (await cookies()).set("accessToken", accessToken, {
+    httpOnly: true,
+    path: "/",
+    secure: isProduction,
+    sameSite: "lax",
+  });
+}
+
+export async function redirectWithLocale(path: string = "/") {
+  const locale = await getLocale();
+  redirect({ href: path, locale });
+}
+
+export async function hasAuthToken(): Promise<boolean> {
+  const cookieStore = await cookies();
+  return cookieStore.has("accessToken");
+}

@@ -12,6 +12,51 @@
   "UserDropdown": {
     "cart": "Koszyk"
   },
+  "Forms": {
+    "email": {
+      "label": "Email *",
+      "placeholder": "jan@kowalski.pl"
+    },
+    "password": {
+      "label": "Hasło *",
+      "placeholder": "******"
+    },
+    "firstName": {
+      "label": "Imię",
+      "placeholder": "Jan"
+    },
+    "lastName": {
+      "label": "Nazwisko",
+      "placeholder": "Kowalski"
+    },
+    "address": {
+      "country": {
+        "label": "Kraj",
+        "placeholder": "Polska"
+      },
+      "city": {
+        "label": "Miasto",
+        "placeholder": "Warszawa"
+      },
+      "zipCode": {
+        "label": "Kod pocztowy",
+        "placeholder": "00-001"
+      },
+      "street": {
+        "label": "Ulica",
+        "placeholder": "Marszałkowska"
+      }
+    },
+    "signIn": "Zaloguj się",
+    "signingIn": "Logowanie...",
+    "signUp": "Zarejestruj się",
+    "signingUp": "Rejestracja...",
+    "addressOptional": "Adres (Opcjonalnie)",
+    "dontHaveAccount": "Nie masz konta?",
+    "dontHaveAccountLink": "Zarejestruj się",
+    "alreadyHaveAccount": "Masz już konto?",
+    "alreadyHaveAccountLink": "Zaloguj się"
+  },
   "Sidebar": {
     "categories": "Kategorie",
     "seeMore": "Zobacz więcej"

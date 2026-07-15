@@ -1,8 +1,4 @@
-import { Container } from "@/components/Container";
 import { APP_NAME } from "@/constants";
-import { Footer } from "@/containers/Footer";
-import { Header } from "@/containers/Header";
-import { Sidebar } from "@/containers/Sidebar";
 import { routing } from "@/i18n";
 import { RootProvider } from "@/providers";
 import { hasLocale } from "next-intl";
@@ -73,12 +69,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col ">
         <RootProvider messages={messages} locale={locale} timeZone={timeZone}>
-          <Header />
-          <Container className="flex-1 items-stretch flex px-2 mt-4 gap-4">
-            <Sidebar />
-            <main className="flex-1 pb-8">{children}</main>
-          </Container>
-          <Footer />
+          {children}
         </RootProvider>
       </body>
     </html>

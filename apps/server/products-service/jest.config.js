@@ -8,6 +8,9 @@ module.exports = {
     '^@categories$': '<rootDir>/src/categories',
     '^@categories/(.*)$': '<rootDir>/src/categories/$1',
 
+    '^@products$': '<rootDir>/src/products',
+    '^@products/(.*)$': '<rootDir>/src/products/$1',
+
     '^@utils$': '<rootDir>/src/utils',
     '^@utils/(.*)$': '<rootDir>/src/utils/$1',
 

@@ -12,6 +12,51 @@
   "UserDropdown": {
     "cart": "Warenkorb"
   },
+  "Forms": {
+    "email": {
+      "label": "E-Mail *",
+      "placeholder": "max@mustermann.de"
+    },
+    "password": {
+      "label": "Passwort *",
+      "placeholder": "******"
+    },
+    "firstName": {
+      "label": "Vorname",
+      "placeholder": "Max"
+    },
+    "lastName": {
+      "label": "Nachname",
+      "placeholder": "Mustermann"
+    },
+    "address": {
+      "country": {
+        "label": "Land",
+        "placeholder": "Deutschland"
+      },
+      "city": {
+        "label": "Stadt",
+        "placeholder": "Berlin"
+      },
+      "zipCode": {
+        "label": "Postleitzahl",
+        "placeholder": "10115"
+      },
+      "street": {
+        "label": "Straße",
+        "placeholder": "Friedrichstraße"
+      }
+    },
+    "signIn": "Anmelden",
+    "signingIn": "Anmelden...",
+    "signUp": "Registrieren",
+    "signingUp": "Registrierung...",
+    "addressOptional": "Adresse (Optional)",
+    "dontHaveAccount": "Sie haben noch kein Konto?",
+    "dontHaveAccountLink": "Registrieren",
+    "alreadyHaveAccount": "Sie haben bereits ein Konto?",
+    "alreadyHaveAccountLink": "Anmelden"
+  },
   "Sidebar": {
     "categories": "Kategorien",
     "seeMore": "Mehr anzeigen"

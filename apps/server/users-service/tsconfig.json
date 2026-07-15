@@ -1,0 +1,42 @@
+{
+  "exclude": [
+    "./coverage",
+    "./dist",
+    "**/*.test.ts",
+    "jest.config.js",
+    "eslint.config.mjs"
+  ],
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "require": ["tsconfig-paths/register"]
+  },
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "rootDir": "./src",
+    "moduleResolution": "node",
+    "checkJs": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "ignoreDeprecations": "6.0",
+    "types": ["jest", "node"],
+    "baseUrl": "./",
+    "paths": {
+      "@users": ["src/users/"],
+      "@users/*": ["src/users/*"],
+      "@utils": ["src/utils/"],
+      "@utils/*": ["src/utils/*"],
+      "@middlewares": ["src/middlewares/"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@configs": ["src/configs/"],
+      "@configs/*": ["src/configs/*"],
+      "@auth": ["src/auth/"],
+      "@auth/*": ["src/auth/*"],
+      "@tokens": ["src/tokens/"],
+      "@tokens/*": ["src/tokens/*"]
+    }
+  }
+}

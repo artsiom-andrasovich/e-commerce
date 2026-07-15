@@ -28,6 +28,8 @@
     "paths": {
       "@utils": ["src/utils/"],
       "@utils/*": ["src/utils/*"],
+      "@products": ["src/products/"],
+      "@products/*": ["src/products/*"],
       "@categories": ["src/categories/"],
       "@categories/*": ["src/categories/*"],
       "@middlewares": ["src/middlewares/"],
