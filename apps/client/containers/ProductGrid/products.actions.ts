@@ -8,6 +8,8 @@ import {
 import { getLocale } from "next-intl/server";
 import { cookies } from "next/headers";
 
+import { DEFAULT_CURRENCY } from "@/constants";
+
 export async function fetchProducts(
   categoryId?: string | null,
   search?: string | null,
@@ -17,7 +19,7 @@ export async function fetchProducts(
   const limit = 10;
   const locale = await getLocale();
   const currencyCookie = (await cookies()).get("currency");
-  const currency = currencyCookie?.value || "USD";
+  const currency = currencyCookie?.value || DEFAULT_CURRENCY;
 
   try {
     const url = new URL(`${API_URL}/api/products`);

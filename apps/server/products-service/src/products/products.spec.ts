@@ -139,8 +139,41 @@ describe("GET /api/products", () => {
       expect.objectContaining({
         data: [],
         nextCursor: null,
-      })
+      }),
     );
+  });
+
+  it("Have to return imageKey as a single string (first element) in list response", async () => {
+    const category = await Category.create({ name: { en: "Laptops" } });
+    await Product.create({
+      title: { en: "MacBook Air" },
+      price: 1000,
+      categoryId: category._id,
+      imageKeys: ["products/dell.png", "products/dell-1.png"],
+    });
+
+    const res = await request(app).get("/api/products");
+
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(typeof res.body.data[0].imageKey).toBe("string");
+    expect(res.body.data[0].imageKey).toBe("products/dell.png");
+  });
+
+  it("Have to return null imageKey in list response when imageKey array is empty", async () => {
+    const category = await Category.create({ name: { en: "Laptops" } });
+    await Product.create({
+      title: { en: "Product without image" },
+      price: 500,
+      categoryId: category._id,
+      imageKeys: [],
+    });
+
+    const res = await request(app).get("/api/products");
+
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].imageKey).toBeNull();
   });
 });
 
@@ -234,6 +267,7 @@ describe("PATCH /api/products", () => {
   });
 
   it("Have to throw Not Found if no product with this _id", async () => {
+    const fakeId = "6a1086bc3fbf67a9fb630fb4";
     const updateProductDto = {
       id: "6a1086bc3fbf67a9fb630fb4",
       title: { en: "Dell XPS", pl: "Dell XPS", de: "Dell XPS" },

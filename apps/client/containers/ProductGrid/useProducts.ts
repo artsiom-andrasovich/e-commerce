@@ -1,4 +1,4 @@
-import { TGetProductsResponse, TProduct } from "@app/lib-shared-types";
+import { TGetProductsResponse, TProductListItem } from "@app/lib-shared-types";
 import { useCallback, useEffect, useState } from "react";
 import { fetchProducts } from "./products.actions";
 
@@ -7,7 +7,7 @@ export const useProducts = (
   search?: string | null,
   initialData?: TGetProductsResponse,
 ) => {
-  const [products, setProducts] = useState<TProduct[]>(initialData?.data || []);
+  const [products, setProducts] = useState<TProductListItem[]>(initialData?.data || []);
   const [nextCursor, setNextCursor] = useState<string | null>(
     initialData?.nextCursor || null,
   );

@@ -1,4 +1,7 @@
-import { generateUploadUrlDto, getBatchAccessUrlsDto } from "@app/lib-shared-types";
+import {
+  generateUploadUrlDto,
+  getBatchAccessUrlsDto,
+} from "@app/lib-shared-types";
 import { Router } from "express";
 import z from "zod";
 import { validateRequest } from "zod-express-middleware";

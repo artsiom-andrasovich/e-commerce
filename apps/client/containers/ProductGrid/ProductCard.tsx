@@ -1,13 +1,17 @@
 "use client";
 
 import { Button } from "@/components/Button";
-import type { TProduct } from "@app/lib-shared-types";
+
+import { Link } from "@/i18n/navigation";
+import type { TProductListItem } from "@app/lib-shared-types";
 import { ImageOff } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 
+import { DEFAULT_CURRENCY } from "@/constants";
+
 type ProductCardProps = {
-  product: TProduct;
+  product: TProductListItem;
 };
 
 export const ProductCard = ({ product }: ProductCardProps) => {
@@ -17,11 +21,14 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const formattedPrice = new Intl.NumberFormat(locale, {
     style: "currency",
-    currency: product.currency || "USD",
+    currency: product.currency || DEFAULT_CURRENCY,
   }).format(product.price);
 
   return (
-    <div className="flex flex-col h-[440px] border border-gray-200 rounded-lg overflow-hidden bg-white shadow">
+    <Link
+      href={`/product/${product.id}`}
+      className="flex flex-col h-[440px] border border-gray-200 rounded-lg overflow-hidden bg-white shadow"
+    >
       <div className="w-full h-56 shrink-0 bg-gray-100 flex items-center justify-center p-4">
         {imageUrl ? (
           <Image
@@ -57,6 +64,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           <Button className="w-full">{t("addToCart")}</Button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

@@ -9,7 +9,10 @@ class ProductsService {
     if (!product) {
       throw ApiError.NotFound(`Product with id ${productId} does not exist`);
     }
-    let [enrichedProduct] = await this.enrichWithImageUrls([product.toJSON()]);
+    let [enrichedProduct] = await this.enrichWithImageUrls(
+      [product.toJSON()],
+      false,
+    );
     [enrichedProduct] = this.enrichWithLocale([enrichedProduct], lang);
     [enrichedProduct] = await this.enrichWithCurrency(
       [enrichedProduct],
@@ -55,6 +58,7 @@ class ProductsService {
 
     let enrichedProducts = await this.enrichWithImageUrls(
       responseProducts.map((p) => p.toJSON()),
+      true,
     );
     enrichedProducts = this.enrichWithLocale(enrichedProducts, lang);
     enrichedProducts = await this.enrichWithCurrency(
@@ -63,19 +67,28 @@ class ProductsService {
     );
 
     return {
-      data: enrichedProducts,
+      data: enrichedProducts.map((p: any) => ({
+        ...p,
+        imageKey: p.imageKey?.[0] ?? null,
+      })),
       nextCursor,
     };
   }
 
-  private async enrichWithImageUrls(products: any[]) {
+  private async enrichWithImageUrls(products: any[], onlyFirstImage?: boolean) {
     if (!products || products.length === 0) return products;
 
     const keys = [
       ...new Set(
-        products.map((product) => product.imageKey).filter((k) => !!k),
+        products
+          .flatMap((product) => {
+            const imgKeys = product.imageKey || [];
+            return onlyFirstImage ? imgKeys[0] : imgKeys;
+          })
+          .filter((k) => !!k),
       ),
     ];
+
     if (keys.length === 0) return products;
 
     try {
@@ -99,9 +112,14 @@ class ProductsService {
 
       return products.map((product) => {
         const obj = { ...product };
+        const imgKeys = obj.imageKey || [];
 
-        if (obj.imageKey && urlsMap[obj.imageKey]) {
-          obj.imageUrl = urlsMap[obj.imageKey];
+        if (onlyFirstImage) {
+          if (urlsMap[imgKeys[0]]) obj.imageUrl = urlsMap[imgKeys[0]];
+        } else {
+          obj.imageUrls = imgKeys
+            .map((k: string) => urlsMap[k])
+            .filter((k: string) => !!k);
         }
 
         return obj;

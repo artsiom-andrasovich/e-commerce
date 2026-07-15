@@ -42,16 +42,16 @@ class UploadService {
     return { finalFileName, uploadUrl };
   }
 
+
+
   public async getAccessUrl(key: string) {
     const command = new GetObjectCommand({
       Bucket: env.AWS_S3_BUCKET_NAME,
       Key: key,
     });
-    const signedUrl = await getSignedUrl(this.s3Client, command, {
+    return getSignedUrl(this.s3Client, command, {
       expiresIn: 3600,
     });
-
-    return signedUrl;
   }
 
   public async getBatchAccessUrls(keys: string[]) {

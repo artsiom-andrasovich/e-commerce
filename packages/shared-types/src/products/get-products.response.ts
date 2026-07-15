@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { productSchema } from "./product.schema";
+import { productListItemSchema } from "./product.schema";
 
 export const getProductsResponseSchema = z.object({
-  data: z.array(productSchema),
+  data: z.array(productListItemSchema),
   nextCursor: z.string().nullable(),
 });
 
