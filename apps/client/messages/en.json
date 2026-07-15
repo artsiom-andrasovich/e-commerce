@@ -10,7 +10,8 @@
     "sign-up": "Sign up"
   },
   "UserDropdown": {
-    "cart": "Cart"
+    "cart": "Cart",
+    "orders": "My Orders"
   },
   "Checkout": {
     "title": "Checkout",
@@ -96,5 +97,15 @@
     "noProductsDesc": "We couldn't find any products in this category. Try selecting a different category or check back later.",
     "loadingMore": "Loading more...",
     "endOfCatalog": "You've reached the end of the catalog."
+  },
+  "MyOrders": {
+    "title": "My Orders",
+    "noOrders": "You haven't placed any orders yet.",
+    "orderNo": "Order ID:",
+    "status": "Status:",
+    "total": "Total Amount:",
+    "delivery": "Delivery Method:",
+    "payment": "Payment Method:",
+    "date": "Placed on:"
   }
 }

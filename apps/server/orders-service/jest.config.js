@@ -20,6 +20,9 @@ module.exports = {
     '^@configs$': '<rootDir>/src/configs',
     '^@configs/(.*)$': '<rootDir>/src/configs/$1',
 
+    '^@mail$': '<rootDir>/src/mail',
+    '^@mail/(.*)$': '<rootDir>/src/mail/$1',
+
     '^src/(.*)$': '<rootDir>/src/$1',
   },
 };

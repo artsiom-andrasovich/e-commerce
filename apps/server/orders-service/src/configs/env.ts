@@ -19,7 +19,12 @@ const envSchema = z.object({
   CLIENT_URL: z.url().default("http://localhost:5050"),
   USERS_SERVICE_URL: z.url().default("http://localhost:3003"),
   UPLOADS_SERVICE_URL: z.url().default("http://localhost:3005"),
-  PRODUCTS_SERVICE_URL: z.url().default("http://localhost:3002"),
+  PRODUCTS_SERVICE_URL: z.url().default("http://localhost:3001"),
+  SMTP_HOST: z.string().min(1).default("smtp.gmail.com"),
+  SMTP_PORT: z.string(),
+  SMTP_USER: z.string().min(1),
+  SMTP_PASS: z.string().min(1),
+  SMTP_FROM: z.string().min(1),
 });
 
 type Env = z.infer<typeof envSchema>;

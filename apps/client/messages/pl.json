@@ -10,7 +10,8 @@
     "sign-up": "Zarejestruj się"
   },
   "UserDropdown": {
-    "cart": "Koszyk"
+    "cart": "Koszyk",
+    "orders": "Moje zamówienia"
   },
   "Checkout": {
     "title": "Kasa",
@@ -96,5 +97,15 @@
     "noProductsDesc": "Nie mogliśmy znaleźć żadnych produktów w tej kategorii. Spróbuj wybrać inną kategorię lub wróć później.",
     "loadingMore": "Ładowanie kolejnych...",
     "endOfCatalog": "Dotarłeś do końca katalogu."
+  },
+  "MyOrders": {
+    "title": "Moje zamówienia",
+    "noOrders": "Nie złożyłeś jeszcze żadnych zamówień.",
+    "orderNo": "ID zamówienia:",
+    "status": "Status:",
+    "total": "Suma całkowita:",
+    "delivery": "Metoda dostawy:",
+    "payment": "Metoda płatności:",
+    "date": "Złożono:"
   }
 }

@@ -2,12 +2,14 @@ import {
   TCreateOrder,
   TJwtPayload,
   TProductListItem,
+  TOrder,
 } from "@app/lib-shared-types";
 import { cartService, CartService } from "@cart/cart.service";
 import { env, logger } from "@configs";
 import { ApiError } from "@utils";
 import Stripe from "stripe";
 import { Order } from "./model";
+import { mailService } from "@mail/mail.service";
 
 export class OrdersService {
   private readonly stripe: Stripe;
@@ -91,6 +93,13 @@ export class OrdersService {
         await order.save();
         await this.cartService.clearCart(user);
 
+        const orderWithProducts = order.toJSON() as TOrder;
+        orderWithProducts.items = orderWithProducts.items.map((item, index) => ({
+          ...item,
+          product: cart.items[index]?.product,
+        }));
+        mailService.sendOrderConfirmation(user.email, orderWithProducts);
+
         return { order, checkoutUrl: session.url };
       } catch (e) {
         logger.error("Stripe error:", e);
@@ -100,6 +109,14 @@ export class OrdersService {
 
     await order.save();
     await this.cartService.clearCart(user);
+
+    const orderWithProducts = order.toJSON() as TOrder;
+    orderWithProducts.items = orderWithProducts.items.map((item, index) => ({
+      ...item,
+      product: cart.items[index]?.product,
+    }));
+    mailService.sendOrderConfirmation(user.email, orderWithProducts);
+
     return { order };
   }
 
@@ -141,6 +158,36 @@ export class OrdersService {
       data: populatedOrders,
       nextPage: hasMore ? page + 1 : null,
     };
+  }
+  public async getOrderById(user: TJwtPayload, orderId: string) {
+    const orderDoc = await Order.findById(orderId);
+    if (!orderDoc) {
+      throw ApiError.NotFound(`Order with id ${orderId} not found`);
+    }
+
+    if (orderDoc.userId !== user.id && user.role !== "ADMIN") {
+      throw ApiError.Forbidden("You are not allowed to view this order");
+    }
+
+    const order = orderDoc.toJSON();
+    const items = await Promise.all(
+      order.items.map(async (item) => {
+        try {
+          const res = await fetch(
+            `${env.PRODUCTS_SERVICE_URL}/api/products/${item.productId}`,
+          );
+          if (res.ok) {
+            const product = (await res.json()) as TProductListItem;
+            return { ...item, product };
+          }
+        } catch (e) {
+          console.error(e);
+        }
+        return item;
+      }),
+    );
+    order.items = items;
+    return order;
   }
 }
 

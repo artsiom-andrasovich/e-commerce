@@ -162,3 +162,82 @@ describe("GET /api/orders", () => {
     expect(resPage2.body.nextPage).toBeNull();
   });
 });
+
+describe("GET /api/orders/:orderId", () => {
+  it("Have to return order details by id in the best scenario", async () => {
+    const order = await Order.create({
+      userId: "userId",
+      items: [
+        {
+          productId: "60c72b2f9b1d8b001c8e4a11",
+          quantity: 2,
+          priceAtPurchase: 100,
+          currencyAtPurchase: "USD",
+        },
+      ],
+      totalAmount: 200,
+      currency: "USD",
+      status: "PENDING",
+      deliveryMethod: "COURIER",
+      paymentMethod: "CASH",
+      billingInfo: {
+        firstName: "John",
+        lastName: "Doe",
+        country: "USA",
+        city: "NY",
+        zipCode: "10001",
+        street: "Broadway",
+      },
+    });
+
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        price: 100,
+        title: "Test Product",
+      }),
+    });
+
+    const res = await request(app).get(`/api/orders/${order.id}`);
+    expect(res.status).toBe(200);
+    expect(res.body.userId).toBe("userId");
+    expect(res.body.totalAmount).toBe(200);
+    expect(res.body.items[0].product.title).toBe("Test Product");
+  });
+
+  it("Have to throw 403 Forbidden if order belongs to another user", async () => {
+    const order = await Order.create({
+      userId: "otherUserId",
+      items: [
+        {
+          productId: "60c72b2f9b1d8b001c8e4a11",
+          quantity: 2,
+          priceAtPurchase: 100,
+          currencyAtPurchase: "USD",
+        },
+      ],
+      totalAmount: 200,
+      currency: "USD",
+      status: "PENDING",
+      deliveryMethod: "COURIER",
+      paymentMethod: "CASH",
+      billingInfo: {
+        firstName: "John",
+        lastName: "Doe",
+        country: "USA",
+        city: "NY",
+        zipCode: "10001",
+        street: "Broadway",
+      },
+    });
+
+    const res = await request(app).get(`/api/orders/${order.id}`);
+    expect(res.status).toBe(403);
+  });
+
+  it("Have to throw 404 Not Found if order does not exist", async () => {
+    const res = await request(app).get("/api/orders/60c72b2f9b1d8b001c8e4a11");
+    expect(res.status).toBe(404);
+  });
+});
+

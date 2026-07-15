@@ -33,22 +33,24 @@ export async function fetchWithAuth(
     if (refreshRes.ok) {
       const data = await refreshRes.json();
 
-      cookieStore.set("accessToken", data.accessToken, {
-        httpOnly: true,
-        path: "/",
-      });
+      try {
+        cookieStore.set("accessToken", data.accessToken, {
+          httpOnly: true,
+          path: "/",
+        });
 
-      const setCookieHeader = refreshRes.headers.get("set-cookie");
-      if (setCookieHeader) {
-        const match = setCookieHeader.match(/refreshToken=([^;]+)/);
-        if (match && match[1]) {
-          cookieStore.set("refreshToken", match[1], {
-            httpOnly: true,
-            path: "/",
-            sameSite: "lax",
-          });
+        const setCookieHeader = refreshRes.headers.get("set-cookie");
+        if (setCookieHeader) {
+          const match = setCookieHeader.match(/refreshToken=([^;]+)/);
+          if (match && match[1]) {
+            cookieStore.set("refreshToken", match[1], {
+              httpOnly: true,
+              path: "/",
+              sameSite: "lax",
+            });
+          }
         }
-      }
+      } catch (cookieError) {}
 
       headers.set("Authorization", `Bearer ${data.accessToken}`);
       res = await fetch(url, { ...options, headers });
